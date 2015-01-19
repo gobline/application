@@ -1,0 +1,5 @@
+docs/
+vendor/
+apigen.neon
+composer.lock
+phpunit.xml

@@ -1,0 +1,79 @@
+<?php
+
+/*
+ * Mendo Framework
+ *
+ * (c) Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Mendo\Mvc\View\Renderer\Html;
+
+use Mendo\Mvc\ViewModel\AbstractViewModel;
+use Mendo\Mvc\View\Renderer\ViewRendererMatcherInterface;
+use Mendo\Mvc\View\Renderer\TemplateFileResolver;
+use Mendo\Mvc\Request\MvcRequest;
+use Mendo\Http\Request\HttpRequestInterface;
+use Pimple\Container;
+
+/**
+ * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
+ */
+class HtmlTemplateRenderer implements ViewRendererMatcherInterface
+{
+    private $helperContainer;
+    private $templateResolver;
+
+    public function __construct(Container $helperContainer, TemplateFileResolver $templateResolver)
+    {
+        $this->helperContainer = $helperContainer;
+        $this->templateResolver = $templateResolver;
+    }
+
+    public function __get($helperName)
+    {
+        return $this->helperContainer[$helperName];
+    }
+
+    public function __call($helperName, array $arguments)
+    {
+        $helper = $this->helperContainer[$helperName];
+
+        return call_user_func_array([$helper, $helperName], $arguments);
+    }
+
+    public function template($template)
+    {
+        ob_start();
+        try {
+            include $this->templateResolver->getPartial($template);
+        } finally {
+            $content = ob_get_clean();
+        }
+
+        return $content;
+    }
+
+    public function render(AbstractViewModel $model)
+    {
+        ob_start();
+        try {
+            include $this->templateResolver->getTemplate($model->getTemplate());
+        } finally {
+            $content = ob_get_clean();
+        }
+
+        echo $content;
+    }
+
+    public function match(HttpRequestInterface $httpRequest, MvcRequest $mvcRequest)
+    {
+        if ($httpRequest->isJsonRequest()) {
+            return false;
+        }
+
+        return true;
+    }
+}
