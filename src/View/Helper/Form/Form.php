@@ -346,7 +346,7 @@ class Form implements ViewHelperInterface
         return $this;
     }
 
-    public function printAllErrors()
+    public function setPrintAllErrors()
     {
         self::$printAllErrors = true;
 

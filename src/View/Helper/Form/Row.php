@@ -70,7 +70,7 @@ class Row
         return $this;
     }
 
-    public function printAllErrors()
+    public function setPrintAllErrors()
     {
         $this->printAllErrors = true;
 
