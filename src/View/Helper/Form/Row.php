@@ -16,13 +16,10 @@ namespace Mendo\Mvc\View\Helper\Form;
  */
 class Row
 {
+    use HelperTrait;
+
     private $name;
     private $form;
-    private $labelAttributes;
-    private $elementAttributes;
-    private $errorAttributes;
-    private $printAllErrors = false;
-    private $labelPosition = 'default';
 
     public function __construct($name, Form $form)
     {
@@ -30,78 +27,34 @@ class Row
         $this->form = $form;
     }
 
-    public function setLabelAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->form->parseAttributes($attributes);
-        }
-
-        $this->labelAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setElementAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->form->parseAttributes($attributes);
-        }
-
-        $this->elementAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setErrorAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->form->parseAttributes($attributes);
-        }
-
-        $this->errorAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setLabelPosition($position)
-    {
-        $this->labelPosition = $position;
-
-        return $this;
-    }
-
-    public function setPrintAllErrors()
-    {
-        $this->printAllErrors = true;
-
-        return $this;
-    }
-
     public function __toString()
     {
         $str = '';
 
-        if ($this->form->getRowWrapperTagName()) {
-            $str .= '<'.$this->form->getRowWrapperTagName();
+        $rowTagName = ($this->rowWrapperTagName !== null) ? $this->rowWrapperTagName : $this->form->getRowWrapperTagName();
+        $rowAttributes = ($this->rowWrapperAttributes !== null) ? $this->rowWrapperAttributes : $this->form->getRowWrapperAttributes() ?: [];
+        $rowErrorClass = ($this->rowWrapperErrorClass !== null) ? $this->rowWrapperErrorClass : $this->form->getRowWrapperErrorClass();
+        $rowLabelPosition = ($this->rowLabelPosition !== null) ? $this->rowLabelPosition : $this->form->getRowLabelPosition();
+        $rowPrintAllErrors = ($this->rowPrintAllErrors !== null) ? $this->rowPrintAllErrors : $this->form->isRowPrintAllErrors();
 
-            $attributes = $this->form->getRowWrapperAttributes() ?: [];
+        if ($rowTagName) {
+            $str .= '<'.$rowTagName;
 
-            $errorClass = $this->form->getRowWrapperErrorClass();
-            if ($errorClass && $this->form->hasErrors($this->name)) {
-                if (array_key_exists('class', $attributes)) {
-                    $attributes['class'] .= ' '.$errorClass;
+            if ($rowErrorClass && $this->form->hasErrors($this->name)) {
+                if (array_key_exists('class', $rowAttributes)) {
+                    $rowAttributes['class'] .= ' '.$rowErrorClass;
                 }
                 else {
-                    $attributes['class'] = $errorClass;
+                    $rowAttributes['class'] = $rowErrorClass;
                 }
             }
 
-            $str .= $this->form->implodeAttributes($attributes).">\n";
+            $str .= $this->form->implodeAttributes($rowAttributes).">\n";
         }
 
-        if ($this->labelPosition === 'append') {
+        if ($rowLabelPosition === 'append') {
             $str .= $this->form->openLabel(null, $this->labelAttributes);
-        } elseif ($this->labelPosition === 'prepend') {
+        } elseif ($rowLabelPosition === 'prepend') {
             $str .= $this->form->openLabel($this->name, $this->labelAttributes);
         } else {
             $str .= $this->form->label($this->name, $this->labelAttributes);
@@ -109,20 +62,20 @@ class Row
 
         $str .= $this->form->element($this->name, $this->elementAttributes);
 
-        if ($this->labelPosition === 'append') {
+        if ($rowLabelPosition === 'append') {
             $str .= $this->form->closeLabel($this->name);
-        } elseif ($this->labelPosition === 'prepend') {
+        } elseif ($rowLabelPosition === 'prepend') {
             $str .= $this->form->closeLabel();
         }
 
-        if ($this->printAllErrors) {
+        if ($rowPrintAllErrors) {
             $str .= $this->form->errors($this->name, $this->errorAttributes);
         } else {
             $str .= $this->form->error($this->name, $this->errorAttributes);
         }
 
-        if ($this->form->getRowWrapperTagName()) {
-            $str .= '</'.$this->form->getRowWrapperTagName().">\n";
+        if ($rowTagName) {
+            $str .= '</'.$rowTagName.">\n";
         }
 
         return $str;

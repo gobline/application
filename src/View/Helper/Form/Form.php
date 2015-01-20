@@ -21,17 +21,11 @@ use Mendo\Translator\Translator;
  */
 class Form implements ViewHelperInterface
 {
+    use HelperTrait;
+
     private $containers = [];
     private $request;
     private $translator;
-    private static $elementAttributes;
-    private static $labelAttributes;
-    private static $errorAttributes;
-    private static $rowWrapperTagName;
-    private static $rowWrapperAttributes;
-    private static $rowWrapperErrorClass;
-    private static $labelPosition;
-    private static $printAllErrors;
 
     public function __construct(Translator $translator = null, HttpRequestInterface $request = null)
     {
@@ -126,7 +120,7 @@ class Form implements ViewHelperInterface
     public function element($name, $attributes = null)
     {
         if ($attributes === null) {
-            $attributes = self::$elementAttributes ?: [];
+            $attributes = $this->elementAttributes ?: [];
         } elseif (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
@@ -154,7 +148,7 @@ class Form implements ViewHelperInterface
     public function openLabel($name = null, $attributes = null)
     {
         if ($attributes === null) {
-            $attributes = self::$labelAttributes ?: [];
+            $attributes = $this->labelAttributes ?: [];
         } elseif (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
@@ -212,7 +206,7 @@ class Form implements ViewHelperInterface
         }
 
         if ($attributes === null) {
-            $attributes = self::$labelAttributes ?: [];
+            $attributes = $this->labelAttributes ?: [];
         } elseif (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
@@ -227,7 +221,7 @@ class Form implements ViewHelperInterface
     public function errors($name, $attributes = null)
     {
         if ($attributes === null) {
-            $attributes = self::$errorAttributes ?: ['class' => 'errors'];
+            $attributes = $this->errorAttributes ?: ['class' => 'errors'];
         } elseif (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
@@ -253,7 +247,7 @@ class Form implements ViewHelperInterface
     public function error($name, $attributes)
     {
         if ($attributes === null) {
-            $attributes = self::$errorAttributes ?: ['class' => 'error'];
+            $attributes = $this->errorAttributes ?: ['class' => 'error'];
         } elseif (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
@@ -278,98 +272,6 @@ class Form implements ViewHelperInterface
         return $element->hasErrors();
     }
 
-    public function setElementAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->parseAttributes($attributes);
-        }
-
-        self::$elementAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setLabelAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->parseAttributes($attributes);
-        }
-
-        self::$labelAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setErrorAttributes($attributes)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->parseAttributes($attributes);
-        }
-
-        self::$errorAttributes = $attributes;
-
-        return $this;
-    }
-
-    public function setRowWrapper($tagName, $attributes, $errorClass)
-    {
-        if (is_string($attributes)) {
-            $attributes = $this->parseAttributes($attributes);
-        }
-
-        self::$rowWrapperTagName = $tagName;
-        self::$rowWrapperAttributes = $attributes;
-        self::$rowWrapperErrorClass = $errorClass;
-
-        return $this;
-    }
-
-    public function getRowWrapperTagName()
-    {
-        return self::$rowWrapperTagName;
-    }
-
-    public function getRowWrapperAttributes()
-    {
-        return self::$rowWrapperAttributes;
-    }
-
-    public function getRowWrapperErrorClass()
-    {
-        return self::$rowWrapperErrorClass;
-    }
-
-    public function setLabelPosition($position)
-    {
-        self::$labelPosition = $position;
-
-        return $this;
-    }
-
-    public function setPrintAllErrors()
-    {
-        self::$printAllErrors = true;
-
-        return $this;
-    }
-
-    private function hyphenate($str)
-    {
-        $str = preg_replace('/[^a-z0-9]+/i', ' ', $str);
-        $str = trim($str);
-        $str = str_replace(" ", "-", $str);
-        $str = strtolower($str);
-
-        return $str;
-    }
-
-    public function parseAttributes($attributes)
-    {
-        preg_match_all('/(?<prop>\\w+)=\"(?<val>.*?)\"\\s?/', $attributes, $matches);
-
-        return array_combine($matches['prop'], $matches['val']);
-    }
-
     public function implodeAttributes(array $attributes)
     {
         $s = '';
@@ -381,5 +283,15 @@ class Form implements ViewHelperInterface
         }
 
         return $s;
+    }
+
+    private function hyphenate($str)
+    {
+        $str = preg_replace('/[^a-z0-9]+/i', ' ', $str);
+        $str = trim($str);
+        $str = str_replace(" ", "-", $str);
+        $str = strtolower($str);
+
+        return $str;
     }
 }
