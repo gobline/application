@@ -35,7 +35,7 @@ class TemplateFileResolver
 
     public function getPartial($template)
     {
-        return $this->getFile($template, 'templates/');
+        return $this->getFile($template, 'partials/');
     }
 
     public function getTemplate($template)

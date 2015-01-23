@@ -44,8 +44,10 @@ class HtmlTemplateRenderer implements ViewRendererMatcherInterface
         return call_user_func_array([$helper, $helperName], $arguments);
     }
 
-    public function template($template)
+    public function partial($template, array $data = [])
     {
+        extract($data);
+
         ob_start();
         try {
             include $this->templateResolver->getPartial($template);
