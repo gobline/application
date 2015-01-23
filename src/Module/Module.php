@@ -16,13 +16,13 @@ namespace Mendo\Mvc\Module;
  */
 class Module
 {
-    private $name;
-    private $path;
-    private $namespace;
-    private $controllerPaths = [];
-    private $viewModelPaths = [];
-    private $templatePaths = [];
-    private $routable;
+    protected $name;
+    protected $path;
+    protected $namespace;
+    protected $controllerPaths = [];
+    protected $viewModelPaths = [];
+    protected $templatePaths = [];
+    protected $routable;
 
     public function __construct($name, $path, $namespace, $routable = true)
     {
