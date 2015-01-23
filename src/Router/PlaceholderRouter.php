@@ -107,7 +107,42 @@ class PlaceholderRouter extends AbstractRouter
                     return false;
                 }
 
+                if ($routeSegment[0] === '*') {
+                    $routeSegment = ltrim($routeSegment, '*');
+
+                    if (!$routeSegment) {
+                        $requestSegments = [];
+                        break;
+                    }
+
+                    if ($routeSegment[0] !== ':') {
+                        throw new \Exception('Invalid route format: '.$this->route);
+                    }
+
+                    $routeSegment = ltrim($routeSegment, ':');
+                    $requestSegment = implode('/', $requestSegments);
+
+                    if (isset($this->constraints[$routeSegment])) {
+                        $result = preg_match($this->constraints[$routeSegment], $requestSegment);
+
+                        if ($result === false) {
+                            throw new \Exception('Pattern "'.$this->constraints[$routeSegment].
+                                '" gave an error for value "'.$requestSegment.'"');
+                        }
+
+                        if (!$result) {
+                            return false;
+                        }
+                    }
+
+                    $params[$routeSegment] = $requestSegment;
+
+                    $requestSegments = [];
+                    break;
+                }
+
                 $requestSegment = array_shift($requestSegments);
+
                 $isPlaceholder = ($routeSegment[0] === ':');
 
                 if ($isPlaceholder) {
@@ -155,10 +190,7 @@ class PlaceholderRouter extends AbstractRouter
 
     public function makeUrl(MvcRequest $request, $language = null)
     {
-        $url = '';
-
-        $route = explode('[/', $this->route);
-        $requiredRoutePart = array_shift($route);
+        $placeholders = [];
 
         if ($request->getModule()) {
             $placeholders[':module'] = $request->getModule();
@@ -176,14 +208,21 @@ class PlaceholderRouter extends AbstractRouter
             $placeholders[':'.$name] = $value;
         }
 
-        $url .= str_replace(array_keys($placeholders), array_values($placeholders), $requiredRoutePart);
+        $url = '';
 
-        if (strpos($url, ':') !== false) {
-            throw new \Exception('parameters are missing');
-        }
+        $route = explode('[/', $this->route);
+        $requiredRoutePart = array_shift($route);
 
-        if (!$route) {
-            return $url;
+        if ($requiredRoutePart) {
+            $url .= str_replace(array_keys($placeholders), array_values($placeholders), $requiredRoutePart);
+
+            if (strpos($url, ':') !== false) {
+                throw new \Exception('parameters are missing');
+            }
+
+            if (!$route) {
+                return str_replace('*', '', $url);
+            }
         }
 
         $rtrim = function ($value) { return rtrim($value, ']'); };
@@ -220,6 +259,6 @@ class PlaceholderRouter extends AbstractRouter
             }
         }
 
-        return $url;
+        return str_replace('*', '', $url);
     }
 }

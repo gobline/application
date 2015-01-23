@@ -23,8 +23,9 @@ class PlaceholderRouter extends AbstractRouter
     private $route;
     private $defaults;
     private $constraints;
+    private $translatePlaceholderValues;
 
-    public function __construct($name, $route, array $defaults, array $constraints = [])
+    public function __construct($name, $route, array $defaults, array $constraints = [], $translatePlaceholderValues = false)
     {
         $this->name = (string) $name;
         if ($this->name === '') {
@@ -38,6 +39,12 @@ class PlaceholderRouter extends AbstractRouter
 
         $this->defaults = $defaults;
         $this->constraints = $constraints;
+        $this->translatePlaceholderValues = $translatePlaceholderValues;
+    }
+
+    public function setTranslatePlaceholderValues($translatePlaceholderValues)
+    {
+        $this->translatePlaceholderValues = $translatePlaceholderValues;
     }
 
     public function getName()
@@ -114,6 +121,45 @@ class PlaceholderRouter extends AbstractRouter
                     return false;
                 }
 
+                if ($routeSegment[0] === '*') {
+                    $routeSegment = ltrim($routeSegment, '*');
+
+                    if (!$routeSegment) {
+                        $requestSegments = [];
+                        break;
+                    }
+
+                    if ($routeSegment[0] !== ':') {
+                        throw new \Exception('Invalid route format: '.$this->route);
+                    }
+
+                    $routeSegment = ltrim($routeSegment, ':');
+                    $requestSegment = implode('/', $requestSegments);
+
+
+                    if ($this->translatePlaceholderValues) {
+                        $requestSegment = isset($translations[$requestSegment]) ? $translations[$requestSegment] : $requestSegment;
+                    }
+
+                    if (isset($this->constraints[$routeSegment])) {
+                        $result = preg_match($this->constraints[$routeSegment], $requestSegment);
+
+                        if ($result === false) {
+                            throw new \Exception('Pattern "'.$this->constraints[$routeSegment].
+                                '" gave an error for value "'.$requestSegment.'"');
+                        }
+
+                        if (!$result) {
+                            return false;
+                        }
+                    }
+
+                    $params[$routeSegment] = $requestSegment;
+
+                    $requestSegments = [];
+                    break;
+                }
+
                 $requestSegment = array_shift($requestSegments);
 
                 $isPlaceholder = ($routeSegment[0] === ':');
@@ -123,6 +169,9 @@ class PlaceholderRouter extends AbstractRouter
 
                     switch ($routeSegment) {
                         default:
+                            if ($this->translatePlaceholderValues) {
+                                $requestSegment = isset($translations[$requestSegment]) ? $translations[$requestSegment] : $requestSegment;
+                            }
                             $params[$routeSegment] = $requestSegment;
                             break;
                         case 'module':
@@ -162,6 +211,27 @@ class PlaceholderRouter extends AbstractRouter
 
     public function makeUrl(MvcRequest $request, $language = null)
     {
+        $placeholders = [];
+
+        if ($request->getModule()) {
+            $placeholders[':module'] = $this->translator->translate($request->getModule(), null, $language);
+        }
+
+        if ($request->getController()) {
+            $placeholders[':controller'] = $this->translator->translate($request->getController(), null, $language);
+        }
+
+        if ($request->getAction()) {
+            $placeholders[':action'] = $this->translator->translate($request->getAction(), null, $language);
+        }
+
+        foreach ($request->getParams() as $name => $value) {
+            if ($this->translatePlaceholderValues) {
+                $value = $this->translator->translate($value, null, $language);
+            }
+            $placeholders[':'.$name] = $value;
+        }
+
         $url = '';
 
         $route = explode('[/', $this->route);
@@ -174,37 +244,20 @@ class PlaceholderRouter extends AbstractRouter
                 if ($routeSegment[0] === ':') {
                     continue;
                 }
-
                 $routeSegment = $this->translator->translate($routeSegment, null, $language);
             }
 
             $requiredRoutePart = '/'.implode('/', $requiredRouteSegments);
-
-            if ($request->getModule()) {
-                $placeholders[':module'] = $this->translator->translate($request->getModule(), null, $language);
-            }
-
-            if ($request->getController()) {
-                $placeholders[':controller'] = $this->translator->translate($request->getController(), null, $language);
-            }
-
-            if ($request->getAction()) {
-                $placeholders[':action'] = $this->translator->translate($request->getAction(), null, $language);
-            }
-
-            foreach ($request->getParams() as $name => $value) {
-                $placeholders[':'.$name] = $value;
-            }
 
             $url = str_replace(array_keys($placeholders), array_values($placeholders), $requiredRoutePart);
 
             if (strpos($url, ':') !== false) {
                 throw new \Exception('parameters are missing');
             }
-        }
 
-        if (!$route) {
-            return $url;
+            if (!$route) {
+                return str_replace('*', '', $url);
+            }
         }
 
         $rtrim = function ($value) { return rtrim($value, ']'); };
@@ -227,8 +280,8 @@ class PlaceholderRouter extends AbstractRouter
                 }
                 $routeSegment = $this->translator->translate($routeSegment, null, $language);
             }
-
             $routePart = implode('/', $routeSegments);
+
             $urlPart = str_replace(array_keys($placeholders), array_values($placeholders), $routePart);
             $replaced = ($urlPart !== $routePart);
 
@@ -251,6 +304,6 @@ class PlaceholderRouter extends AbstractRouter
             }
         }
 
-        return $url;
+        return str_replace('*', '', $url);
     }
 }
