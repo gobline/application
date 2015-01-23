@@ -28,6 +28,12 @@ class Request implements ViewHelperInterface
         $this->request = $request;
     }
 
+    public function __call($name, array $arguments)
+    {
+        array_unshift($arguments, $name);
+        return $this->route(...$arguments);
+    }
+
     public function route($route, $data, $language = null)
     {
         if (!is_array($data)) {

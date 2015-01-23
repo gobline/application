@@ -63,6 +63,12 @@ class Url implements ViewHelperInterface
         return $this->urlMaker->makeUrl($request, $language);
     }
 
+    public function __call($name, array $arguments)
+    {
+        array_unshift($arguments, $name);
+        return $this->route(...$arguments);
+    }
+
     public function route($route, $data, $language = null)
     {
         if (!is_array($data)) {
