@@ -12,7 +12,7 @@
 namespace Mendo\Mvc\View\Renderer;
 
 use Mendo\Mvc\Request\MvcRequest;
-use Mendo\Mvc\Module\Modules;
+use Mendo\Mvc\Module\ModuleCollection;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -22,7 +22,7 @@ class TemplateFileResolver
     private $mvcRequest;
     private $modules;
 
-    public function __construct(MvcRequest $mvcRequest, Modules $modules)
+    public function __construct(MvcRequest $mvcRequest, ModuleCollection $modules)
     {
         $this->mvcRequest = $mvcRequest;
         $this->modules = $modules;

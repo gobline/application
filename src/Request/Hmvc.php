@@ -12,7 +12,7 @@
 namespace Mendo\Mvc\Request;
 
 use Mendo\Http\Request\HttpRequestInterface;
-use Mendo\Mvc\Router\Routers;
+use Mendo\Mvc\Router\UrlMaker;
 use Mendo\Mvc\View\Renderer\ViewRendererInterface;
 
 /**
@@ -23,21 +23,19 @@ class Hmvc
     private $httpRequest;
     private $mvcRequest;
     private $dispatcher;
-    private $routers;
+    private $urlMaker;
     private $viewRenderer;
 
     public function __construct(
         HttpRequestInterface $httpRequest,
         MvcRequest $mvcRequest,
         Dispatcher $dispatcher,
-        Routers $routers,
-        ViewRendererInterface $viewRenderer
+        UrlMaker $urlMaker
     ) {
         $this->httpRequest = $httpRequest;
         $this->mvcRequest = $mvcRequest;
         $this->dispatcher = $dispatcher;
-        $this->routers = $routers;
-        $this->viewRenderer = $viewRenderer;
+        $this->urlMaker = $urlMaker;
     }
 
     public function execute(MvcRequest $subRequest, $language = null)
@@ -59,7 +57,11 @@ class Hmvc
             $this->httpRequest->setLanguage($language);
         }
 
-        $path = $this->routers->get($subRequest->getRoute())->makeUrl($subRequest, $language);
+        $context = $this->urlMaker->getContext();
+        $this->urlMaker->setContext(null);
+        $path = $this->urlMaker->makeUrl($subRequest, $language);
+        $this->urlMaker->setContext($context);
+
         $this->httpRequest->setPath($path);
         $this->httpRequest->setQueryData([]);
         $this->httpRequest->setPostData([]);
@@ -69,7 +71,7 @@ class Hmvc
 
         ob_start();
 
-        $this->dispatcher->dispatch($this->viewRenderer);
+        $this->dispatcher->dispatch();
 
         $return = ob_get_clean();
 

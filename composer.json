@@ -11,7 +11,9 @@
     ],
     "keywords": [
         "mf", "mendoframework", "mendo framework",
-        "mvc", "mvc framework"
+        "mvc", "mvc framework",
+        "hmvc", "hmvc framework",
+        "mvvm", "mvvm framework"
     ],
     "homepage": "https://github.com/mendoframework",
     "autoload": {
@@ -29,8 +31,10 @@
         "mendoframework/form": "dev-master",
         "mendoframework/http": "dev-master",
         "mendoframework/mediator": "dev-master",
+        "mendoframework/router": "dev-master",
         "mendoframework/session": "dev-master",
         "mendoframework/translator": "dev-master",
+        "zendframework/zend-escaper": "~2.3",
         "filp/whoops": "1.2.*@dev"
     },
     "require-dev": {

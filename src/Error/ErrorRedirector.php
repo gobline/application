@@ -15,7 +15,7 @@ use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Mvc\Request\Authorizer;
 use Mendo\Mvc\Request\Forwarder;
 use Mendo\Mvc\Request\Redirector;
-use Mendo\Mvc\Module\Modules;
+use Mendo\Mvc\Module\ModuleCollection;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -33,7 +33,7 @@ class ErrorRedirector
         Authorizer $authorizer,
         Forwarder $forwarder,
         Redirector $redirector,
-        Modules $modules
+        ModuleCollection $modules
     ) {
         $this->request = $mvcRequest;
         $this->authorizer = $authorizer;

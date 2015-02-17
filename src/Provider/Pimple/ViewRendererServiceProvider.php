@@ -55,7 +55,7 @@ class ViewRendererServiceProvider implements ServiceProviderInterface
             return new HtmlLayoutRenderer(
                 $c['view.renderer.html.templateRenderer'],
                 $c['view.templateFileResolver'],
-                $c['view.renderer.html.layouts']);
+                $c['layouts']);
         };
 
         $container['view.renderer.html.templateRenderer'] = function ($c) {

@@ -13,6 +13,7 @@ namespace Mendo\Mvc\Provider\Pimple;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Zend\Escaper\Escaper as ZendEscaper;
 use Mendo\Mvc\View\Helper\ActiveMenuClass\ActiveMenuClass;
 use Mendo\Mvc\View\Helper\Asset\AssetVersions;
 use Mendo\Mvc\View\Helper\Asset\Collection\CssCollectionFactory;
@@ -69,7 +70,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
                     $c['eventDispatcher.view'],
                     $c['assetVersions'],
                     $c['view.helper.css.minifier'],
-                    new ModuleAssetCopier($c['modules'], $c['request.mvc']),
+                    new ModuleAssetCopier($c['module.collection'], $c['request.mvc']),
                     $c['request.http']->getBaseUrl());
             });
 
@@ -78,7 +79,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
                     $c['eventDispatcher.view'],
                     $c['assetVersions'],
                     $c['view.helper.js.minifier'],
-                    new ModuleAssetCopier($c['modules'], $c['request.mvc']),
+                    new ModuleAssetCopier($c['module.collection'], $c['request.mvc']),
                     $c['request.http']->getBaseUrl());
             });
 
@@ -87,7 +88,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
                     $c['eventDispatcher.view'],
                     $c['assetVersions'],
                     $c['view.helper.css.minifier'],
-                    new ModuleAssetCopier($c['modules'], $c['request.mvc']),
+                    new ModuleAssetCopier($c['module.collection'], $c['request.mvc']),
                     $c['request.http']->getBaseUrl());
             });
 
@@ -96,7 +97,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
                     $c['eventDispatcher.view'],
                     $c['assetVersions'],
                     $c['view.helper.js.minifier'],
-                    new ModuleAssetCopier($c['modules'], $c['request.mvc']),
+                    new ModuleAssetCopier($c['module.collection'], $c['request.mvc']),
                     $c['request.http']->getBaseUrl());
             });
 
@@ -113,7 +114,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
             };
 
             $helpers['escape'] = function () use ($c) {
-                return new Escape();
+                return new Escape(new ZendEscaper());
             };
 
             $helpers['find'] = function () use ($c) {
@@ -131,7 +132,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
             $helpers['hreflang'] = function () use ($c) {
                 return new Hreflang(
                     $c['eventDispatcher.view'],
-                    $c['router.urlMaker'],
+                    $c['router.mvc.urlMaker'],
                     $c['request.mvc'],
                     $c['request.http.language.list']);
             };
@@ -165,7 +166,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
             };
 
             $helpers['url'] = function () use ($c) {
-                return new Url($c['router.urlMaker'], $c['request.mvc']);
+                return new Url($c['router.mvc.urlMaker'], $c['request.mvc']);
             };
 
             return $helpers;

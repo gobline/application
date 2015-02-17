@@ -14,7 +14,7 @@ namespace Mendo\Mvc\Module;
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
-class Modules
+class ModuleCollection
 {
     private $modules = [];
     private $routableModules = [];

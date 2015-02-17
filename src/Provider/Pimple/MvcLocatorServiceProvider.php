@@ -24,7 +24,7 @@ class MvcLocatorServiceProvider implements ServiceProviderInterface
     {
         $container['mvcLocator'] = function ($c) {
             return new MvcLocator(
-            	$c['modules'],
+            	$c['module.collection'],
             	$c,
             	$c['action.helper.container'],
             	$c['view.helper.container']);

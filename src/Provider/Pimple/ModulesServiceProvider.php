@@ -13,7 +13,7 @@ namespace Mendo\Mvc\Provider\Pimple;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Mendo\Mvc\Module\Modules;
+use Mendo\Mvc\Module\ModuleCollection;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -22,8 +22,8 @@ class ModulesServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['modules'] = function () {
-            return new Modules();
+        $container['module.collection'] = function () {
+            return new ModuleCollection();
         };
     }
 }

@@ -12,82 +12,90 @@
 namespace Mendo\Mvc\Router;
 
 use Mendo\Http\Request\HttpRequestInterface;
-use Mendo\Mvc\Request\MvcRequest;
+use Mendo\Router\PlaceholderRouter;
+use Mendo\Router\I18n\PlaceholderRouter as PlaceholderI18nRouter;
+use Mendo\Router\AbstractRouter;
+use Mendo\Router\RouteData;
+use Mendo\Translator\TranslatorInterface;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
-class DefaultRouter extends AbstractRouter
+class DefaultRouter extends AbstractRouter 
 {
+    private $router;
     private $modules;
+    private $defaultModule;
 
-    public function __construct(array $modules)
+    public function __construct($name, $routePrefix, $defaults, TranslatorInterface $translator = null)
     {
-        $this->modules = $modules;
-    }
+        parent::__construct($name);
 
-    public function getName()
-    {
-        return 'default';
+        $route = ($routePrefix ? $routePrefix : '(/)').'(/:controller(/)(/:action(/)(/:params+)))';
+        $constraints = [
+            'controller' => '[a-zA-Z][a-zA-Z0-9_-]+',
+            'action' => '[a-zA-Z_][a-zA-Z0-9_-]+',
+        ];
+
+        if ($translator) {
+            $this->router = new PlaceholderI18nRouter($name, $route, $defaults, $constraints, ['controller', 'action', 'params']);
+            $this->router->setTranslator($translator);
+        } else {
+            $this->router = new PlaceholderRouter($name, $route, $defaults, $constraints);
+        }
     }
 
     public function match(HttpRequestInterface $httpRequest)
     {
-        $mvcRequest = new MvcRequest($this->getName(), $this->defaultModule, 'index', 'index');
+        $routeData = $this->router->match($httpRequest);
 
-        $segments = $this->getSegments($httpRequest->getPath());
-
-        if (!$segments) {
-            return $mvcRequest;
+        if ($routeData === false) {
+            return false;
         }
 
-        $segment = array_shift($segments);
-
-        if (in_array($segment, $this->modules)) {
-            $mvcRequest->setModule($segment);
-
-            if ($segments) {
-                $mvcRequest->setController(array_shift($segments));
-            }
-        } else {
-            $mvcRequest->setController($segment);
+        if ($routeData->hasParam('params')) {
+            $params = $routeData->getParam('params');
+            $params = $this->makeKeyValuePairs($params);
+            $params = $params + $routeData->getParams();
+            unset($params['params']);
+            $routeData->setParams($params);
         }
 
-        if ($segments) {
-            $mvcRequest->setAction(array_shift($segments));
-        }
-
-        if ($segments) {
-            $params = $this->makeKeyValuePairs($segments);
-            foreach ($params as $name => $value) {
-                $params[$name] = $this->decodeParam($value);
-            }
-            $mvcRequest->setParams($params);
-        }
-
-        return $mvcRequest;
+        return $routeData;
     }
 
-    public function makeUrl(MvcRequest $request, $language = null)
+    public function makeUrl(RouteData $routeData, $language = null)
     {
-        $url = '';
-
-        if ($request->getModule() !== $this->defaultModule) {
-            $url .= '/'.$request->getModule();
-        }
-
-        if ($request->getAction() !== 'index' || $request->getParams()) {
-            $url .= '/'.$request->getController();
-            $url .= '/'.$request->getAction();
-    
-            foreach ($request->getParams() as $name => $value) {
-                $value = $this->encodeParam($value);
-                $url .= '/'.$name.'/'.$value;
+        $params = [];
+        foreach ($routeData->getParams() as $key => $value) {
+            if (
+                $key === 'module' || 
+                $key === 'controller' || 
+                $key === 'action'
+            ) {
+                $params[$key] = $value;
+            } else {
+                $params['params'][] = $key;
+                $params['params'][] = $value;
             }
-        } elseif ($request->getController() !== 'index') {
-            $url .= '/'.$request->getController();
         }
 
-        return $url;
+        $routeData->setParams($params);
+
+        return $this->router->makeUrl($routeData, $language);
+    }
+
+    private function makeKeyValuePairs(array $array)
+    {
+        $pairs = [];
+        $nb = count($array);
+        for ($i = 0; $i < $nb - 1; $i += 2) {
+            $pairs[$array[$i]] = $array[$i+1];
+        }
+        if ($i < $nb) {
+            $pairs[$array[$i]] = '';
+        }
+
+        return $pairs;
     }
 }

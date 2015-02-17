@@ -47,17 +47,7 @@ class Bootstrap
 
     private function createContainer()
     {
-        $config = [];
-
-        if (is_file(getcwd().'/config/core.base.php')) {
-            $config = array_merge($config, include getcwd().'/config/core.base.php');
-        }
-
-        if (is_file(getcwd().'/config/core.'.$this->env.'.php')) {
-            $config = array_merge($config, include getcwd().'/config/core.'.$this->env.'.php');
-        }
-
-        $this->container = new CompositionRoot($config + ['environment' => $this->env]);
+        $this->container = new CompositionRoot(['environment' => $this->env]);
     }
 
     public function registerServices($file)
@@ -103,7 +93,7 @@ class Bootstrap
         $eventDispatcher = $c['eventDispatcher.mvc'];
         $eventDispatcher->dispatch('start');
 
-        $c['request.mvc'] = $c['request.mvc.factory']->createRequest($c['request.http']);
+        $c['request.mvc'] = $c['router.mvc.requestMatcher']->match($c['request.http']);
 
         if (!empty($c['error.redirector'])) {
             $errorHandler->setErrorRedirector($c['error.redirector']);

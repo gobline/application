@@ -23,7 +23,7 @@ class TemplateFileResolverServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['view.templateFileResolver'] = function ($c) {
-            return new TemplateFileResolver($c['request.mvc'], $c['modules']);
+            return new TemplateFileResolver($c['request.mvc'], $c['module.collection']);
         };
     }
 }

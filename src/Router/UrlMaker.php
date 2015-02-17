@@ -11,41 +11,40 @@
 
 namespace Mendo\Mvc\Router;
 
+use Mendo\Router\UrlMakerInterface;
 use Mendo\Http\Request\HttpRequestInterface;
 use Mendo\Mvc\Request\MvcRequest;
+use Mendo\Router\RouteData;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
 class UrlMaker
 {
-    private $routers;
-    private $httpRequest;
+    private $urlMaker;
 
-    public function __construct(Routers $routers, HttpRequestInterface $httpRequest)
+    public function __construct(UrlMakerInterface $urlMaker)
     {
-        $this->routers = $routers;
-        $this->httpRequest = $httpRequest;
+        $this->urlMaker = $urlMaker;
+    }
+
+    public function setContext(HttpRequestInterface $httpRequest = null)
+    {
+        $this->urlMaker->setContext($httpRequest);
+    }
+
+    public function getContext()
+    {
+        return $this->urlMaker->getContext();
     }
 
     public function makeUrl(MvcRequest $request, $language = null)
     {
-        if (!$language) {
-            $language = $this->httpRequest->getLanguage();
-        }
+        $params = $request->getParams();
+        $params['module'] = $request->getModule();
+        $params['controller'] = $request->getController();
+        $params['action'] = $request->getAction();
 
-        $path = $this->routers->get($request->getRoute())->makeUrl($request, $language);
-
-        $httpRequest = clone $this->httpRequest;
-        $httpRequest->setPath($path);
-
-        $makeAbsoluteUrl = false;
-
-        if ($language) {
-            $makeAbsoluteUrl = ($httpRequest->getLanguage() !== $language);
-            $httpRequest->setLanguage($language);
-        }
-
-        return $httpRequest->getUrl($makeAbsoluteUrl);
+        return $this->urlMaker->makeUrl(new RouteData($request->getRoute(), $params), $language);
     }
 }

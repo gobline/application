@@ -76,7 +76,7 @@ class ActionHelperContainerServiceProvider implements ServiceProviderInterface
             };
 
             $helpers['url'] = function () use ($c) {
-                return new Url($c['router.urlMaker'], $c['request.mvc']);
+                return new Url($c['router.mvc.urlMaker'], $c['request.mvc']);
             };
 
             return $helpers;

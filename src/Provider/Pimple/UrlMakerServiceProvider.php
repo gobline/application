@@ -22,8 +22,8 @@ class UrlMakerServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['router.urlMaker'] = function ($c) {
-            return new UrlMaker($c['routers'], $c['request.http']);
+        $container['router.mvc.urlMaker'] = function ($c) {
+            return new UrlMaker($c['router.urlMaker']);
         };
     }
 }

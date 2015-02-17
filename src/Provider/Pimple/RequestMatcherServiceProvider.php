@@ -13,17 +13,17 @@ namespace Mendo\Mvc\Provider\Pimple;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Mendo\Mvc\Request\MvcRequestFactory;
+use Mendo\Mvc\Router\RequestMatcher;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
-class MvcRequestFactoryServiceProvider implements ServiceProviderInterface
+class RequestMatcherServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['request.mvc.factory'] = function ($c) {
-            return new MvcRequestFactory($c['routers']);
+        $container['router.mvc.requestMatcher'] = function ($c) {
+            return new RequestMatcher($c['router.requestMatcher']);
         };
     }
 }

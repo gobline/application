@@ -22,12 +22,8 @@ class LayoutsServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['view.renderer.html.layouts.routeMap'] = [];
-
-        $container['view.renderer.html.layouts'] = function ($c) {
-            return new Layouts(
-                $c['request.mvc'],
-                $c['view.renderer.html.layouts.routeMap']);
+        $container['layouts'] = function ($c) {
+            return new Layouts($c['request.mvc']);
         };
     }
 }

@@ -27,8 +27,7 @@ class HmvcRequestServiceProvider implements ServiceProviderInterface
                 $c['request.http'],
                 $c['request.mvc'],
                 $c['request.dispatcher'],
-                $c['routers'],
-                $c['view.renderer.html.templateRenderer']);
+                $c['router.mvc.urlMaker']);
         };
     }
 }

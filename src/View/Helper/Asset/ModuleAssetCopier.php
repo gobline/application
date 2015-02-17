@@ -11,7 +11,7 @@
 
 namespace Mendo\Mvc\View\Helper\Asset;
 
-use Mendo\Mvc\Module\Modules;
+use Mendo\Mvc\Module\ModuleCollection;
 use Mendo\Mvc\Request\MvcRequest;
 
 /**
@@ -22,7 +22,7 @@ class ModuleAssetCopier
     private $modules;
     private $request;
 
-    public function __construct(Modules $modules, MvcRequest $request)
+    public function __construct(ModuleCollection $modules, MvcRequest $request)
     {
         $this->modules = $modules;
         $this->request = $request;

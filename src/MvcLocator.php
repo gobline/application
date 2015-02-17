@@ -12,7 +12,7 @@
 namespace Mendo\Mvc;
 
 use Pimple\Container;
-use Mendo\Mvc\Module\Modules;
+use Mendo\Mvc\Module\ModuleCollection;
 use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Mvc\ViewModel\DefaultViewModel;
 use Mendo\Mvc\Controller\DefaultController;
@@ -28,7 +28,7 @@ class MvcLocator
     private $viewHelperContainer;
 
     public function __construct(
-        Modules $modules,
+        ModuleCollection $modules,
         Container $container,
         Container $actionHelperContainer,
         Container $viewHelperContainer

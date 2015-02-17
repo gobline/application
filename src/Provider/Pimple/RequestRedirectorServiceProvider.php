@@ -23,7 +23,7 @@ class RequestRedirectorServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['request.redirector'] = function ($c) {
-            return new Redirector($c['router.urlMaker'], $c['flash']);
+            return new Redirector($c['router.mvc.urlMaker'], $c['flash']);
         };
     }
 }

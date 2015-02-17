@@ -20,21 +20,25 @@ use ArrayIterator;
  */
 class Layouts implements IteratorAggregate
 {
-    private $rules;
+    private $routeLayoutFileMap = [];
     private $layouts = [];
     private $request;
 
-    public function __construct(MvcRequest $request, array $routeMap = [])
+    public function __construct(MvcRequest $request)
     {
         $this->request = $request;
+    }
 
-        foreach ($routeMap as $route => &$layouts) {
-            if ($layouts && !is_array($layouts)) {
-                $layouts = [$layouts];
-            }
+    public function add($route, $layouts)
+    {
+        if (!is_array($layouts)) {
+            $layouts = [$layouts];
         }
 
-        $this->rules = $routeMap;
+        $this->routeLayoutFileMap[$route] = $layouts;
+
+        return $this;
+
     }
 
     public function getLayouts()
@@ -46,7 +50,7 @@ class Layouts implements IteratorAggregate
         $bestMatch = null;
         $currentRoute = (string) $this->request;
 
-        foreach ($this->rules as $route => $layouts) {
+        foreach ($this->routeLayoutFileMap as $route => $layouts) {
             if (
                 $this->startsWith($currentRoute, $route) &&
                 ($bestMatch === null || strlen($route) > strlen($bestMatch))
@@ -56,7 +60,7 @@ class Layouts implements IteratorAggregate
         }
 
         if ($bestMatch !== null) {
-            $this->layouts = $this->rules[$bestMatch] ?: [];
+            $this->layouts = $this->routeLayoutFileMap[$bestMatch] ?: [];
         } else {
             $this->layouts = [$this->request->getModule()];
         }
