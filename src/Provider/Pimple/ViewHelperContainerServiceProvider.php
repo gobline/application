@@ -137,6 +137,10 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
                     $c['request.http.language.list']);
             };
 
+            $helpers['identity'] = function () use ($c) {
+                return new Identity($c['auth']);
+            };
+
             $helpers['lang'] = function () use ($c) {
                 return new Lang($c['eventDispatcher.view'], $c['request.http']);
             };
