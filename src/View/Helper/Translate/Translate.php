@@ -13,6 +13,7 @@ namespace Mendo\Mvc\View\Helper\Translate;
 
 use Mendo\Mvc\View\Helper\ViewHelperInterface;
 use Mendo\Translator\Translator;
+use Mendo\Http\Request\HttpRequestInterface;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -20,14 +21,20 @@ use Mendo\Translator\Translator;
 class Translate implements ViewHelperInterface
 {
     private $translator;
+    private $request;
 
-    public function __construct(Translator $translator)
+    public function __construct(Translator $translator, HttpRequestInterface $request)
     {
         $this->translator = $translator;
+        $this->request = $request;
     }
 
     public function translate($str, array $params = null, $language = null)
     {
+        if (!$language) {
+            $language = $this->request->getLanguage() ?: null;
+        }
+
         return $this->translator->translate($str, $params, $language);
     }
 }
