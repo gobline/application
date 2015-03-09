@@ -81,6 +81,11 @@ class Module
         return $this->templatePaths;
     }
 
+    public function setTemplatePaths(array $templatePaths)
+    {
+        return $this->templatePaths = $templatePaths;
+    }
+
     public function addControllerPath($namespace, $path)
     {
         if ((string) $namespace === '') {
