@@ -57,6 +57,17 @@ class WhoopsServiceProvider implements ServiceProviderInterface
                 ]);
             } catch (Exception $e) {
             }
+            try {
+                $auth = $container['auth'];
+                $errorPageHandler->addDataTable('Mendo Application (Auth)', [
+                    'Authenticated' => (bool) $auth->isAuthenticated(),
+                    'Role'          => $auth->getRole(),
+                    'Id'            => $auth->getId(),
+                    'Login'         => $auth->getLogin(),
+                    'Properties'    => $auth->getProperties(),
+                ]);
+            } catch (Exception $e) {
+            }
         });
 
         $container['whoops'] = function ($c) {
