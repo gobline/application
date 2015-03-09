@@ -13,6 +13,7 @@ namespace Mendo\Mvc\Controller\Helper\Forward;
 
 use Mendo\Mvc\Controller\Helper\ActionHelperInterface;
 use Mendo\Mvc\Request\Dispatcher;
+use Mendo\Mvc\Request\MvcRequest;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -44,6 +45,6 @@ class Forward implements ActionHelperInterface
 
         $this->mvcRequest->setParams($params);
         $this->mvcRequest->setForwarded();
-        $this->dispatcher->dispatch($this->mvcRequest);
+        $this->dispatcher->dispatch();
     }
 }
