@@ -19,6 +19,7 @@ use Mendo\Mvc\Controller\Helper\Filter\Filter;
 use Mendo\Mvc\Controller\Helper\Find\Find;
 use Mendo\Mvc\Controller\Helper\Flash\Flash;
 use Mendo\Mvc\Controller\Helper\Forward\Forward;
+use Mendo\Mvc\Controller\Helper\Identity\Identity;
 use Mendo\Mvc\Controller\Helper\Lang\Lang;
 use Mendo\Mvc\Controller\Helper\Redirect\Redirect;
 use Mendo\Mvc\Controller\Helper\Request\Request;
@@ -57,6 +58,10 @@ class ActionHelperContainerServiceProvider implements ServiceProviderInterface
 
             $helpers['forward'] = function () use ($c) {
                 return new Forward($c['request.dispatcher'], $c['request.mvc']);
+            };
+
+            $helpers['identity'] = function () use ($c) {
+                return new Identity($c['auth']);
             };
 
             $helpers['lang'] = function () use ($c) {
