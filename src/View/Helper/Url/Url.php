@@ -29,7 +29,7 @@ class Url implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function url($path, $data = null, $language = null)
+    public function url($path, $data = null, $language = null, $absolute = false)
     {
         $path = explode('/', $path);
         switch (count($path)) {
@@ -60,7 +60,7 @@ class Url implements ViewHelperInterface
 
         $request = new MvcRequest('default', $module, $controller, $action, $data);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
     public function __call($name, array $arguments)
@@ -69,7 +69,7 @@ class Url implements ViewHelperInterface
         return $this->route(...$arguments);
     }
 
-    public function route($route, $data, $language = null)
+    public function route($route, $data, $language = null, $absolute = false)
     {
         if (!is_array($data)) {
             $data = $this->makeKeyValuePairs(explode('/', $data));
@@ -98,10 +98,10 @@ class Url implements ViewHelperInterface
 
         $request = new MvcRequest($route, $module, $controller, $action, $data);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
-    public function self($data = [], $language = null)
+    public function self($data = [], $language = null, $absolute = false)
     {
         $module = $this->request->getModule();
         $controller = $this->request->getController();
@@ -113,15 +113,14 @@ class Url implements ViewHelperInterface
 
         $request = new MvcRequest('default', $module, $controller, $action, $data);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
     private function makeKeyValuePairs(array $array)
     {
         $pairs = [];
         $nb = count($array);
-        $i = 0;
-        for (; $i < $nb - 1; $i += 2) {
+        for ($i = 0; $i < $nb - 1; $i += 2) {
             $pairs[$array[$i]] = $array[$i+1];
         }
         if ($i < $nb) {

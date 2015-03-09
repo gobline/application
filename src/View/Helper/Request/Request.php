@@ -109,8 +109,7 @@ class Request implements ViewHelperInterface
     {
         $pairs = [];
         $nb = count($array);
-        $i = 0;
-        for (; $i < $nb - 1; $i += 2) {
+        for ($i = 0; $i < $nb - 1; $i += 2) {
             $pairs[$array[$i]] = $array[$i+1];
         }
         if ($i < $nb) {
