@@ -77,7 +77,7 @@ class ActionHelperContainerServiceProvider implements ServiceProviderInterface
             };
 
             $helpers['translate'] = function () use ($c) {
-                return new Translate($c['translator']);
+                return new Translate($c['translator'], $c['request.http']);
             };
 
             $helpers['url'] = function () use ($c) {
