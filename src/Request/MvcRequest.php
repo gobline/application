@@ -187,6 +187,11 @@ class MvcRequest
         $this->subRequest = true;
     }
 
+    public function isInternal()
+    {
+        return (bool) $this->forwarded ?: $this->subRequest ?: false;
+    }
+
     private function toCamelCase($str)
     {
         return ucfirst(str_replace(' ', '', ucwords(strtolower(str_replace('-', ' ', $str)))));
