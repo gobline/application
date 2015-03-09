@@ -64,7 +64,7 @@ class DefaultRouter extends AbstractRouter
         return $routeData;
     }
 
-    public function makeUrl(RouteData $routeData, $language = null)
+    public function makeUrl(RouteData $routeData, $language = null, $absolute = false)
     {
         $params = [];
         foreach ($routeData->getParams() as $key => $value) {
@@ -82,7 +82,7 @@ class DefaultRouter extends AbstractRouter
 
         $routeData->setParams($params);
 
-        return $this->router->makeUrl($routeData, $language);
+        return $this->router->makeUrl($routeData, $language, $absolute);
     }
 
     private function makeKeyValuePairs(array $array)
