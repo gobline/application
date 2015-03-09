@@ -30,10 +30,6 @@ class Filter implements ActionHelperInterface
     {
         $funnel = $this->funnelFactory->createFunnel();
 
-        if (!$value) {
-            return $funnel;
-        }
-
         return $funnel->filter($value, $filters);
     }
 }
