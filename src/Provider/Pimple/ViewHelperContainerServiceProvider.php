@@ -29,6 +29,7 @@ use Mendo\Mvc\View\Helper\Escape\Escape;
 use Mendo\Mvc\View\Helper\Find\Find;
 use Mendo\Mvc\View\Helper\Form\Form;
 use Mendo\Mvc\View\Helper\Hreflang\Hreflang;
+use Mendo\Mvc\View\Helper\Identity\Identity;
 use Mendo\Mvc\View\Helper\Lang\Lang;
 use Mendo\Mvc\View\Helper\NoIndex\NoIndex;
 use Mendo\Mvc\View\Helper\Placeholder\Placeholder;
