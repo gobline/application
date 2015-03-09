@@ -29,7 +29,7 @@ class Url implements ActionHelperInterface
         $this->request = $request;
     }
 
-    public function url($action = null, $controller = null, $module = null, array $params = [], $language = null)
+    public function url($action = null, $controller = null, $module = null, array $params = [], $language = null, $absolute = false)
     {
         if (!$action) {
             $action = $this->request->getAction();
@@ -45,10 +45,10 @@ class Url implements ActionHelperInterface
 
         $request = new MvcRequest('default', $module, $controller, $action, $params);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
-    public function route($route, array $data = [], $language = null)
+    public function route($route, array $data = [], $language = null, $absolute = false)
     {
         if (isset($data['module'])) {
             $module = $data['module'];
@@ -73,10 +73,10 @@ class Url implements ActionHelperInterface
 
         $request = new MvcRequest($route, $module, $controller, $action, $data);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
-    public function self(array $data = [], $language = null)
+    public function self(array $data = [], $language = null, $absolute = false)
     {
         $module = $this->request->getModule();
         $controller = $this->request->getController();
@@ -84,6 +84,6 @@ class Url implements ActionHelperInterface
 
         $request = new MvcRequest('default', $module, $controller, $action, $data);
 
-        return $this->urlMaker->makeUrl($request, $language);
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 }
