@@ -24,8 +24,6 @@ use Mendo\Translator\TranslatorInterface;
 class DefaultRouter extends AbstractRouter 
 {
     private $router;
-    private $modules;
-    private $defaultModule;
 
     public function __construct($name, $routePrefix, $defaults, TranslatorInterface $translator = null)
     {
