@@ -31,7 +31,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
             $errorPageHandler = $container['whoops.error_page_handler'];
             try {
                 $httpRequest = $container['request.http'];
-                $errorPageHandler->addDataTable('Mendo Application (HttpRequest)', [
+                $errorPageHandler->addDataTable('Mendo HttpRequest', [
                     'URL'          => $httpRequest->getUrl(true),
                     'Relative URL' => $httpRequest->getUrl(),
                     'Path'         => $httpRequest->getPath(),
@@ -46,7 +46,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
             }
             try {
                 $mvcRequest = $container['request.mvc'];
-                $errorPageHandler->addDataTable('Mendo Application (MvcRequest)', [
+                $errorPageHandler->addDataTable('Mendo MvcRequest', [
                     'Route'      => $mvcRequest->getRoute(),
                     'Module'     => $mvcRequest->getModule(),
                     'Controller' => $mvcRequest->getController(),
@@ -59,7 +59,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
             }
             try {
                 $auth = $container['auth'];
-                $errorPageHandler->addDataTable('Mendo Application (Auth)', [
+                $errorPageHandler->addDataTable('Mendo Auth', [
                     'Authenticated' => (bool) $auth->isAuthenticated(),
                     'Role'          => $auth->getRole(),
                     'Id'            => $auth->getId(),
