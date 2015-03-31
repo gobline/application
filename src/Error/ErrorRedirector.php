@@ -15,7 +15,6 @@ use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Mvc\Request\Authorizer;
 use Mendo\Mvc\Request\Forwarder;
 use Mendo\Mvc\Request\Redirector;
-use Mendo\Mvc\Module\ModuleCollection;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -26,20 +25,17 @@ class ErrorRedirector
     private $authorizer;
     private $forwarder;
     private $redirector;
-    private $modules;
 
     public function __construct(
         MvcRequest $mvcRequest,
         Authorizer $authorizer,
         Forwarder $forwarder,
-        Redirector $redirector,
-        ModuleCollection $modules
+        Redirector $redirector
     ) {
         $this->request = $mvcRequest;
         $this->authorizer = $authorizer;
         $this->forwarder = $forwarder;
         $this->redirector = $redirector;
-        $this->modules = $modules;
     }
 
     public function redirect(\Exception $e)
