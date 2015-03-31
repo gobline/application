@@ -27,8 +27,7 @@ class ErrorRedirectorServiceProvider implements ServiceProviderInterface
                 $c['request.mvc'],
                 $c['request.authorizer'],
                 $c['request.forwarder'],
-                $c['request.redirector'],
-                $c['module.collection']
+                $c['request.redirector']
             );
         };
     }
