@@ -78,4 +78,9 @@ class HtmlTemplateRenderer implements ViewRendererMatcherInterface
 
         return true;
     }
+
+    public function isRenderable(AbstractViewModel $model)
+    {
+        return (bool) $this->templateResolver->getTemplate($model->getTemplate());
+    }
 }

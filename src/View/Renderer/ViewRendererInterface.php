@@ -18,5 +18,7 @@ use Mendo\Mvc\ViewModel\AbstractViewModel;
  */
 interface ViewRendererInterface
 {
-    public function render(AbstractViewModel $viewModel);
+    public function render(AbstractViewModel $model);
+
+    public function isRenderable(AbstractViewModel $model);
 }

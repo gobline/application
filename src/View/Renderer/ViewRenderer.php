@@ -29,12 +29,23 @@ class ViewRenderer implements ViewRendererInterface
     public function render(AbstractViewModel $model)
     {
         foreach ($this->renderers as $renderer) {
-            if ($renderer->match($this->httpRequest, $this->mvcRequest)) {
+            if ($renderer->match($this->httpRequest, $this->mvcRequest) && $renderer->isRenderable($model)) {
                 $renderer->render($model);
                 return;
             }
         }
 
         throw new \RuntimeException('No matching renderer for request "' . $httpRequest->getUrl(true) . '"');
+    }
+
+    public function isRenderable(AbstractViewModel $model)
+    {
+        foreach ($this->renderers as $renderer) {
+            if ($renderer->match($this->httpRequest, $this->mvcRequest)) {
+                return $renderer->isRenderable($model);
+            }
+        }
+
+        return false;
     }
 }

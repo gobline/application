@@ -33,4 +33,8 @@ class JsonRenderer implements ViewRendererMatcherInterface
     public function render(AbstractViewModel $viewModel)
     {
     }
+
+    public function isRenderable(AbstractViewModel $model)
+    {
+    }
 }

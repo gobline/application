@@ -94,4 +94,9 @@ class HtmlMasterLayoutRenderer implements ViewRendererMatcherInterface
 
         return true;
     }
+
+    public function isRenderable(AbstractViewModel $model)
+    {
+        return $this->htmlRenderer->isRenderable($model);
+    }
 }
