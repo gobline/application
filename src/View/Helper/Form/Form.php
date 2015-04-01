@@ -117,6 +117,11 @@ class Form implements ViewHelperInterface
         return new Row($name, $this);
     }
 
+    public function group($name)
+    {
+        return new Group($name, $this);
+    }
+
     public function element($name, $attributes = null)
     {
         if ($attributes === null) {
@@ -145,7 +150,7 @@ class Form implements ViewHelperInterface
         return $element;
     }
 
-    public function openLabel($name = null, $attributes = null)
+    public function openLabel($element = null, $attributes = null)
     {
         if ($attributes === null) {
             $attributes = $this->labelAttributes ?: [];
@@ -155,9 +160,11 @@ class Form implements ViewHelperInterface
 
         $str = '<label'.$this->implodeAttributes($attributes).'>';
 
-        if ($name) {
-            $container = $this->getContainer();
-            $element = $container->getComponent($name);
+        if ($element) {
+            if (is_string($element)) {
+                $container = $this->getContainer();
+                $element = $container->getComponent($element);
+            }
 
             $label = $element->getLabel();
 
@@ -172,13 +179,15 @@ class Form implements ViewHelperInterface
         return $str;
     }
 
-    public function closeLabel($name = null)
+    public function closeLabel($element = null)
     {
         $str = '';
 
-        if ($name) {
-            $container = $this->getContainer();
-            $element = $container->getComponent($name);
+        if ($element) {
+            if (is_string($element)) {
+                $container = $this->getContainer();
+                $element = $container->getComponent($element);
+            }
 
             $label = $element->getLabel();
 
@@ -193,10 +202,12 @@ class Form implements ViewHelperInterface
         return $str."</label>\n";
     }
 
-    public function label($name, $attributes = null)
+    public function label($element, $attributes = null)
     {
-        $container = $this->getContainer();
-        $element = $container->getComponent($name);
+        if (is_string($element)) {
+            $container = $this->getContainer();
+            $element = $container->getComponent($element);
+        }
 
         $label = $element->getLabel();
 

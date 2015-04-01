@@ -34,8 +34,8 @@ class Row
         $rowTagName = ($this->rowWrapperTagName !== null) ? $this->rowWrapperTagName : $this->form->getRowWrapperTagName();
         $rowAttributes = ($this->rowWrapperAttributes !== null) ? $this->rowWrapperAttributes : $this->form->getRowWrapperAttributes() ?: [];
         $rowErrorClass = ($this->rowWrapperErrorClass !== null) ? $this->rowWrapperErrorClass : $this->form->getRowWrapperErrorClass();
-        $rowLabelPosition = ($this->rowLabelPosition !== null) ? $this->rowLabelPosition : $this->form->getRowLabelPosition();
-        $rowPrintAllErrors = ($this->rowPrintAllErrors !== null) ? $this->rowPrintAllErrors : $this->form->isRowPrintAllErrors();
+        $labelPosition = ($this->labelPosition !== null) ? $this->labelPosition : $this->form->getLabelPosition();
+        $printAllErrors = ($this->printAllErrors !== null) ? $this->printAllErrors : $this->form->isPrintAllErrors();
 
         if ($rowTagName) {
             $str .= '<'.$rowTagName;
@@ -52,9 +52,9 @@ class Row
             $str .= $this->form->implodeAttributes($rowAttributes).">\n";
         }
 
-        if ($rowLabelPosition === 'append') {
+        if ($labelPosition === 'append') {
             $str .= $this->form->openLabel(null, $this->labelAttributes);
-        } elseif ($rowLabelPosition === 'prepend') {
+        } elseif ($labelPosition === 'prepend') {
             $str .= $this->form->openLabel($this->name, $this->labelAttributes);
         } else {
             $str .= $this->form->label($this->name, $this->labelAttributes);
@@ -62,13 +62,13 @@ class Row
 
         $str .= $this->form->element($this->name, $this->elementAttributes);
 
-        if ($rowLabelPosition === 'append') {
+        if ($labelPosition === 'append') {
             $str .= $this->form->closeLabel($this->name);
-        } elseif ($rowLabelPosition === 'prepend') {
+        } elseif ($labelPosition === 'prepend') {
             $str .= $this->form->closeLabel();
         }
 
-        if ($rowPrintAllErrors) {
+        if ($printAllErrors) {
             $str .= $this->form->errors($this->name, $this->errorAttributes);
         } else {
             $str .= $this->form->error($this->name, $this->errorAttributes);

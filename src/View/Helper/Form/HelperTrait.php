@@ -22,8 +22,8 @@ trait HelperTrait
     private $rowWrapperTagName;
     private $rowWrapperAttributes;
     private $rowWrapperErrorClass;
-    private $rowPrintAllErrors;
-    private $rowLabelPosition;
+    private $printAllErrors;
+    private $labelPosition;
 
     public function setElementAttributes($attributes)
     {
@@ -86,28 +86,28 @@ trait HelperTrait
         return $this->rowWrapperErrorClass;
     }
 
-    public function setRowLabelPosition($position)
+    public function setLabelPosition($position)
     {
-        $this->rowLabelPosition = $position;
+        $this->labelPosition = $position;
 
         return $this;
     }
 
-    public function getRowLabelPosition()
+    public function getLabelPosition()
     {
-        return $this->rowLabelPosition;
+        return $this->labelPosition;
     }
 
-    public function setRowPrintAllErrors($printAllErrors)
+    public function setPrintAllErrors($printAllErrors)
     {
-        $this->rowPrintAllErrors = $printAllErrors;
+        $this->printAllErrors = $printAllErrors;
 
         return $this;
     }
 
-    public function isRowPrintAllErrors()
+    public function isPrintAllErrors()
     {
-        return (bool) $this->rowPrintAllErrors;
+        return (bool) $this->printAllErrors;
     }
 
     public function parseAttributes($attributes)
