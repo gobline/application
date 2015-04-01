@@ -26,6 +26,7 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
     private $htmlRenderer;
     private $templateResolver;
     private $layouts;
+    private $layoutsIterator;
     private $model;
 
     public function __construct(
@@ -35,7 +36,7 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
     ) {
         $this->htmlRenderer = $htmlRenderer;
         $this->templateResolver = $templateResolver;
-        $this->layouts = $layouts->getIterator();
+        $this->layouts = $layouts;
     }
 
     public function __get($name)
@@ -52,9 +53,9 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
     {
         ob_start();
         try {
-            if ($this->layouts->current()) {
-                $layout = $this->layouts->current();
-                $this->layouts->next();
+            if ($this->layoutsIterator->current()) {
+                $layout = $this->layoutsIterator->current();
+                $this->layoutsIterator->next();
 
                 include $this->templateResolver->getLayout($layout);
             } else {
@@ -70,6 +71,8 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
     public function render(AbstractViewModel $model)
     {
         $this->model = $model;
+
+        $this->layoutsIterator = $this->layouts->getIterator();
 
         echo $this->content();
     }
