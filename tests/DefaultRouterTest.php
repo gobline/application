@@ -17,27 +17,7 @@ class DefaultRouterTest extends PHPUnit_Framework_TestCase
     {
         $routers = new RouterCollection();
 
-        $routers->add(
-            new DefaultRouter(
-                'default',
-                '(/)',
-                [
-                    'module' => 'index',
-                    'controller' => 'index',
-                    'action' => 'index',
-                ]
-            ));
-
-        $routers->add(
-            new DefaultRouter(
-                'users',
-                '/users',
-                [
-                    'module' => 'users',
-                    'controller' => 'index',
-                    'action' => 'index',
-                ]
-            ));
+        $routers->add(new DefaultRouter(['index', 'users']));
 
         $requestMatcher = new RequestMatcher($routers);
         $urlMaker = new UrlMaker($routers);
@@ -59,23 +39,23 @@ class DefaultRouterTest extends PHPUnit_Framework_TestCase
         $routeData = $requestMatcher->match(new StringHttpRequest('http://example.com/users/profile'));
 
         $this->assertInstanceOf('Mendo\Router\RouteData', $routeData);
-        $this->assertSame('users', $routeData->getRouteName());
+        $this->assertSame('default', $routeData->getRouteName());
         $this->assertEquals(['module' => 'users', 'controller' => 'profile', 'action' => 'index'], $routeData->getParams());
-        $this->assertSame('/users/profile', $urlMaker->makeUrl(new RouteData('users', ['controller' => 'profile', 'action' => 'index']), 'en'));
+        $this->assertSame('/users/profile', $urlMaker->makeUrl(new RouteData('default', ['module' => 'users', 'controller' => 'profile', 'action' => 'index']), 'en'));
 
         $routeData = $requestMatcher->match(new StringHttpRequest('http://example.com/users/profile/edit/foo/bar/corge/grault'));
 
         $this->assertInstanceOf('Mendo\Router\RouteData', $routeData);
-        $this->assertSame('users', $routeData->getRouteName());
+        $this->assertSame('default', $routeData->getRouteName());
         $this->assertEquals(['module' => 'users', 'controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault'], $routeData->getParams());
-        $this->assertSame('/users/profile/edit/foo/bar/corge/grault', $urlMaker->makeUrl(new RouteData('users', ['controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault']), 'en'));
+        $this->assertSame('/users/profile/edit/foo/bar/corge/grault', $urlMaker->makeUrl(new RouteData('default', ['module' => 'users', 'controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault']), 'en'));
     }
 
     public function testDefaultI18nRouterMatch()
     {
         $translator = new Translator();
         $translator->addTranslationArray([
-            '/users(/:controller(/)(/:action(/)(/:params+)))' => '/membres(/:controller(/)(/:action(/)(/:params+)))',
+            'users' => 'membres',
             'profile' => 'profil',
             'edit' => 'modifier',
             'foo' => 'toto',
@@ -86,29 +66,9 @@ class DefaultRouterTest extends PHPUnit_Framework_TestCase
 
         $routers = new RouterCollection();
 
-        $routers->add(
-            new DefaultRouter(
-                'default',
-                '(/)',
-                [
-                    'module' => 'index',
-                    'controller' => 'index',
-                    'action' => 'index',
-                ],
-                $translator
-            ));
-
-        $routers->add(
-            new DefaultRouter(
-                'users',
-                '/users',
-                [
-                    'module' => 'users',
-                    'controller' => 'index',
-                    'action' => 'index',
-                ],
-                $translator
-            ));
+        $router = new DefaultRouter(['index', 'users']);
+        $router->setTranslator($translator);
+        $routers->add($router);
 
         $requestMatcher = new RequestMatcher($routers);
         $urlMaker = new UrlMaker($routers);
@@ -136,8 +96,8 @@ class DefaultRouterTest extends PHPUnit_Framework_TestCase
         $routeData = $requestMatcher->match($httpRequest);
 
         $this->assertInstanceOf('Mendo\Router\RouteData', $routeData);
-        $this->assertSame('users', $routeData->getRouteName());
+        $this->assertSame('default', $routeData->getRouteName());
         $this->assertEquals(['module' => 'users', 'controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault'], $routeData->getParams());
-        $this->assertSame('/membres/profil/modifier/toto/titi/machin/truc', $urlMaker->makeUrl(new RouteData('users', ['controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault']), 'fr'));
+        $this->assertSame('/membres/profil/modifier/toto/titi/machin/truc', $urlMaker->makeUrl(new RouteData('default', ['module' => 'users', 'controller' => 'profile', 'action' => 'edit', 'foo' => 'bar', 'corge' => 'grault']), 'fr'));
     }
 }

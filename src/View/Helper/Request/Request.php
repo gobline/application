@@ -68,20 +68,6 @@ class Request implements ViewHelperInterface
 
     public function url($path, $data = null, $language = null)
     {
-        $path = explode(':', $path);
-        switch (count($path)) {
-            case 2:
-                $route = $path[0];
-                $path = $path[1];
-                break;
-            case 1:
-                $route = 'default';
-                $path = $path[0];
-                break;
-            default:
-                throw new \InvalidArgumentException('$path invalid');
-        }
-
         $path = explode('/', $path);
         switch (count($path)) {
             case 3:
@@ -109,7 +95,7 @@ class Request implements ViewHelperInterface
             $data = $this->makeKeyValuePairs(explode('/', $data));
         }
 
-        $request = new MvcRequest($route, $module, $controller, $action, $data);
+        $request = new MvcRequest('default', $module, $controller, $action, $data);
 
         return $this->hmvc->execute($request, $language);
     }

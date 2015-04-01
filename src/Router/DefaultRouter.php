@@ -14,6 +14,7 @@ namespace Mendo\Mvc\Router;
 use Mendo\Http\Request\HttpRequestInterface;
 use Mendo\Router\PlaceholderRouter;
 use Mendo\Router\I18n\PlaceholderRouter as PlaceholderI18nRouter;
+use Mendo\Router\I18n\TranslatorAwareTrait;
 use Mendo\Router\AbstractRouter;
 use Mendo\Router\RouteData;
 use Mendo\Translator\TranslatorInterface;
@@ -23,29 +24,59 @@ use Mendo\Translator\TranslatorInterface;
  */
 class DefaultRouter extends AbstractRouter 
 {
+    use TranslatorAwareTrait;
+
     private $router;
+    private $modules;
+    private $defaultModule;
 
-    public function __construct($name, $routePrefix, $defaults, TranslatorInterface $translator = null)
+    public function __construct(array $modules, $defaultModule = 'index')
     {
-        parent::__construct($name);
+        parent::__construct('default');
+        $this->modules = $modules;
+        $this->defaultModule = $defaultModule;
+    }
 
-        $route = ($routePrefix ? $routePrefix : '(/)').'(/:controller(/)(/:action(/)(/:params+)))';
+    private function createRouter($route)
+    {
+        $defaults = [
+            'module' => $this->defaultModule,
+            'controller' => 'index',
+            'action' => 'index',
+        ];
         $constraints = [
             'controller' => '[a-zA-Z][a-zA-Z0-9_-]+',
             'action' => '[a-zA-Z_][a-zA-Z0-9_-]+',
         ];
 
-        if ($translator) {
-            $this->router = new PlaceholderI18nRouter($name, $route, $defaults, $constraints, ['controller', 'action', 'params']);
-            $this->router->setTranslator($translator);
+        if ($this->translator) {
+            $router = new PlaceholderI18nRouter($this->name, $route, $defaults, $constraints, ['module', 'controller', 'action', 'params']);
+            $router->setTranslator($this->translator);
         } else {
-            $this->router = new PlaceholderRouter($name, $route, $defaults, $constraints);
+            $router = new PlaceholderRouter($this->name, $route, $defaults, $constraints);
         }
+
+        return $router;
     }
 
     public function match(HttpRequestInterface $httpRequest)
     {
-        $routeData = $this->router->match($httpRequest);
+        $segments = explode('/', ltrim($httpRequest->getPath(), '/'));
+        $isDefaultModule = true;
+        if ($segments) {
+            $language = $httpRequest->getLanguage();
+            if ($this->translator && $language && $this->translator->hasTranslations($language)) {
+                $segments[0] = array_search($segments[0], $this->translator->getTranslations($language)) ?: $segments[0];
+            }
+            $isDefaultModule = (!in_array($segments[0], $this->modules) || $segments[0] === $this->defaultModule);
+        }
+
+        $route = ($isDefaultModule) ? 
+            '(/)(/:controller(/)(/:action(/)(/:params+)))' : 
+            '(/:module(/)(/:controller(/)(/:action(/)(/:params+))))';
+        $router = $this->createRouter($route);
+
+        $routeData = $router->match($httpRequest);
 
         if ($routeData === false) {
             return false;
@@ -64,6 +95,11 @@ class DefaultRouter extends AbstractRouter
 
     public function makeUrl(RouteData $routeData, $language = null, $absolute = false)
     {
+        $route = ($routeData->getParam('module', $this->defaultModule) === $this->defaultModule) ? 
+            '(/)(/:controller(/)(/:action(/)(/:params+)))' : 
+            '(/:module(/)(/:controller(/)(/:action(/)(/:params+))))';
+        $router = $this->createRouter($route);
+
         $params = [];
         foreach ($routeData->getParams() as $key => $value) {
             if (
@@ -80,7 +116,7 @@ class DefaultRouter extends AbstractRouter
 
         $routeData->setParams($params);
 
-        return $this->router->makeUrl($routeData, $language, $absolute);
+        return $router->makeUrl($routeData, $language, $absolute);
     }
 
     private function makeKeyValuePairs(array $array)

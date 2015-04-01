@@ -22,6 +22,7 @@ use Mendo\Router\Provider\Pimple\RouterServiceProvider;
 use Mendo\Session\Provider\Pimple\SessionServiceProvider;
 use Mendo\Translator\Provider\Pimple\TranslatorServiceProvider;
 use Mendo\Mvc\Provider\Pimple\ActionHelperContainerServiceProvider;
+use Mendo\Mvc\Provider\Pimple\DefaultRouterServiceProvider;
 use Mendo\Mvc\Provider\Pimple\ErrorHandlerServiceProvider;
 use Mendo\Mvc\Provider\Pimple\ErrorRedirectorServiceProvider;
 use Mendo\Mvc\Provider\Pimple\HmvcRequestServiceProvider;
@@ -63,6 +64,7 @@ class CompositionRoot extends Container
         $this->register(new FunnelFactoryServiceProvider('filterFunnelFactory'));
 
         $this->register(new ActionHelperContainerServiceProvider());
+        $this->register(new DefaultRouterServiceProvider());
         $this->register(new ErrorHandlerServiceProvider());
         $this->register(new ErrorRedirectorServiceProvider());
         $this->register(new HmvcRequestServiceProvider());
