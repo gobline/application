@@ -17,16 +17,14 @@ use Mendo\Router\I18n\PlaceholderRouter as PlaceholderI18nRouter;
 use Mendo\Router\I18n\TranslatorAwareTrait;
 use Mendo\Router\AbstractRouter;
 use Mendo\Router\RouteData;
-use Mendo\Translator\TranslatorInterface;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
-class DefaultRouter extends AbstractRouter 
+class DefaultRouter extends AbstractRouter
 {
     use TranslatorAwareTrait;
 
-    private $router;
     private $modules;
     private $defaultModule;
 
