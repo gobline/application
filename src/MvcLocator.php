@@ -25,18 +25,15 @@ class MvcLocator
     private $modules;
     private $container;
     private $actionHelperContainer;
-    private $viewHelperContainer;
 
     public function __construct(
         ModuleCollection $modules,
         Container $container,
-        Container $actionHelperContainer,
-        Container $viewHelperContainer
+        Container $actionHelperContainer
     ) {
         $this->modules = $modules;
         $this->container = $container;
         $this->actionHelperContainer = $actionHelperContainer;
-        $this->viewHelperContainer = $viewHelperContainer;
     }
 
     public function getController(MvcRequest $request)
