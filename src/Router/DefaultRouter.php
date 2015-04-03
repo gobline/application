@@ -38,17 +38,17 @@ class DefaultRouter extends AbstractRouter
     private function createRouter($route)
     {
         $defaults = [
-            'module' => $this->defaultModule,
-            'controller' => 'index',
-            'action' => 'index',
+            '_module' => $this->defaultModule,
+            '_controller' => 'index',
+            '_action' => 'index',
         ];
         $constraints = [
-            'controller' => '[a-zA-Z][a-zA-Z0-9_-]+',
-            'action' => '[a-zA-Z_][a-zA-Z0-9_-]+',
+            '_controller' => '[a-zA-Z][a-zA-Z0-9_-]+',
+            '_action' => '[a-zA-Z_][a-zA-Z0-9_-]+',
         ];
 
         if ($this->translator) {
-            $router = new PlaceholderI18nRouter($this->name, $route, $defaults, $constraints, ['module', 'controller', 'action', 'params']);
+            $router = new PlaceholderI18nRouter($this->name, $route, $defaults, $constraints, ['_module', '_controller', '_action', 'params']);
             $router->setTranslator($this->translator);
         } else {
             $router = new PlaceholderRouter($this->name, $route, $defaults, $constraints);
@@ -70,8 +70,8 @@ class DefaultRouter extends AbstractRouter
         }
 
         $route = ($isDefaultModule) ? 
-            '(/)(/:controller(/)(/:action(/)(/:params+)))' : 
-            '(/:module(/)(/:controller(/)(/:action(/)(/:params+))))';
+            '(/)(/:_controller(/)(/:_action(/)(/:params+)))' : 
+            '(/:_module(/)(/:_controller(/)(/:_action(/)(/:params+))))';
         $router = $this->createRouter($route);
 
         $routeData = $router->match($httpRequest);
@@ -93,17 +93,17 @@ class DefaultRouter extends AbstractRouter
 
     public function makeUrl(RouteData $routeData, $language = null, $absolute = false)
     {
-        $route = ($routeData->getParam('module', $this->defaultModule) === $this->defaultModule) ? 
-            '(/)(/:controller(/)(/:action(/)(/:params+)))' : 
-            '(/:module(/)(/:controller(/)(/:action(/)(/:params+))))';
+        $route = ($routeData->getParam('_module', $this->defaultModule) === $this->defaultModule) ? 
+            '(/)(/:_controller(/)(/:_action(/)(/:params+)))' : 
+            '(/:_module(/)(/:_controller(/)(/:_action(/)(/:params+))))';
         $router = $this->createRouter($route);
 
         $params = [];
         foreach ($routeData->getParams() as $key => $value) {
             if (
-                $key === 'module' || 
-                $key === 'controller' || 
-                $key === 'action'
+                $key === '_module' || 
+                $key === '_controller' || 
+                $key === '_action'
             ) {
                 $params[$key] = $value;
             } else {

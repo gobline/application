@@ -50,23 +50,23 @@ class Url implements ActionHelperInterface
 
     public function route($route, array $data = [], $language = null, $absolute = false)
     {
-        if (isset($data['module'])) {
-            $module = $data['module'];
-            unset($data['module']);
+        if (isset($data['_module'])) {
+            $module = $data['_module'];
+            unset($data['_module']);
         } else {
             $module = $this->request->getModule();
         }
 
-        if (isset($data['controller'])) {
-            $controller = $data['controller'];
-            unset($data['controller']);
+        if (isset($data['_controller'])) {
+            $controller = $data['_controller'];
+            unset($data['_controller']);
         } else {
             $controller = $this->request->getController();
         }
 
-        if (isset($data['action'])) {
-            $action = $data['action'];
-            unset($data['action']);
+        if (isset($data['_action'])) {
+            $action = $data['_action'];
+            unset($data['_action']);
         } else {
             $action = $this->request->getAction();
         }

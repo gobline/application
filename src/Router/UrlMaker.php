@@ -41,9 +41,9 @@ class UrlMaker
     public function makeUrl(MvcRequest $request, $language = null, $absolute = false)
     {
         $params = $request->getParams();
-        $params['module'] = $request->getModule();
-        $params['controller'] = $request->getController();
-        $params['action'] = $request->getAction();
+        $params['_module'] = $request->getModule();
+        $params['_controller'] = $request->getController();
+        $params['_action'] = $request->getAction();
 
         return $this->urlMaker->makeUrl(new RouteData($request->getRoute(), $params), $language, $absolute);
     }
