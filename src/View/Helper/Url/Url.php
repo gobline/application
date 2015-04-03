@@ -116,6 +116,27 @@ class Url implements ViewHelperInterface
         return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
 
+    public function template($template, $language = null, $absolute = false)
+    {
+        $template = explode(':', $template);
+        switch (count($template)) {
+            case 2:
+                $module = $template[0];
+                $template = $template[1];
+                break;
+            case 1:
+                $module = null;
+                $template = $template[0];
+                break;
+            default:
+                throw new \InvalidArgumentException('$path invalid');
+        }
+
+        $request = new MvcRequest('template', $module, null, null, [], $template);
+
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
+    }
+
     private function makeKeyValuePairs(array $array)
     {
         $pairs = [];

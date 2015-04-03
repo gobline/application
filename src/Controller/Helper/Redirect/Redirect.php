@@ -77,4 +77,12 @@ class Redirect implements ActionHelperInterface
         $this->redirector->redirect($request, $flashMessages, $language);
         exit;
     }
+
+    public function template($template, $module = null, array $flashMessages = [], $language = null)
+    {
+        $request = new MvcRequest('template', $module, null, null, [], $template);
+
+        $this->redirector->redirect($request, $flashMessages, $language);
+        exit;
+    }
 }

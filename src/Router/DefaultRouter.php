@@ -101,15 +101,21 @@ class DefaultRouter extends AbstractRouter
         $params = [];
         foreach ($routeData->getParams() as $key => $value) {
             if (
-                $key === '_module' || 
-                $key === '_controller' || 
+                $key === '_template'
+            ) {
+                continue;
+            }
+            if (
+                $key === '_module' ||
+                $key === '_controller' ||
                 $key === '_action'
             ) {
                 $params[$key] = $value;
-            } else {
-                $params['params'][] = $key;
-                $params['params'][] = $value;
+                continue;
             }
+
+            $params['params'][] = $key;
+            $params['params'][] = $value;
         }
 
         $routeData->setParams($params);

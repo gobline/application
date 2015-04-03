@@ -86,4 +86,11 @@ class Url implements ActionHelperInterface
 
         return $this->urlMaker->makeUrl($request, $language, $absolute);
     }
+
+    public function template($template, $module = null, $language = null, $absolute = false)
+    {
+        $request = new MvcRequest('template', $module, null, null, [], $template);
+
+        return $this->urlMaker->makeUrl($request, $language, $absolute);
+    }
 }

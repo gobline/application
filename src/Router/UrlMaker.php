@@ -44,6 +44,7 @@ class UrlMaker
         $params['_module'] = $request->getModule();
         $params['_controller'] = $request->getController();
         $params['_action'] = $request->getAction();
+        $params['_template'] = $request->getTemplate();
 
         return $this->urlMaker->makeUrl(new RouteData($request->getRoute(), $params), $language, $absolute);
     }

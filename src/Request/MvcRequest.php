@@ -20,34 +20,28 @@ class MvcRequest
     private $module;
     private $controller;
     private $action;
+    private $template;
     private $params;
     private $forwarded = 0;
     private $dispatched = false;
     private $subRequest = false;
 
-    public function __construct($route, $module, $controller, $action, array $params = [])
+    public function __construct($route, $module, $controller, $action, array $params = [], $template = null)
     {
         $this->route = (string) $route;
         if ($this->route === '') {
             throw new \InvalidArgumentException('$route cannot be empty');
         }
 
-        $this->module = (string) $module;
-        if ($this->module === '') {
-            throw new \InvalidArgumentException('$module cannot be empty');
-        }
+        $this->module = $module;
 
-        $this->controller = (string) $controller;
-        if ($this->controller === '') {
-            throw new \InvalidArgumentException('$controller cannot be empty');
-        }
+        $this->controller = $controller;
 
-        $this->action = (string) $action;
-        if ($this->action === '') {
-            throw new \InvalidArgumentException('$action cannot be empty');
-        }
+        $this->action = $action;
 
         $this->params = $params;
+
+        $this->template = ($template) ?: $controller;
     }
 
     public function getRoute()
@@ -108,6 +102,21 @@ class MvcRequest
         }
 
         $this->action = $action;
+    }
+
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    public function setTemplate($template)
+    {
+        $template = (string) $template;
+        if ($template === '') {
+            throw new \InvalidArgumentException('$template cannot be empty');
+        }
+
+        $this->template = $template;
     }
 
     public function hasParam($name)

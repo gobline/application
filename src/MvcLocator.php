@@ -38,13 +38,16 @@ class MvcLocator
 
     public function getController(MvcRequest $request)
     {
-        $className = $request->getController(true).'Controller';
-        $paths = $this->modules->get($request->getModule())->getControllerPaths();
-        $instance = $this->getInstance($request->getModule(true), $className, $paths);
+        $instance = null;
 
-        if ($instance === null) {
-            $instance = new DefaultController();
+        $controller = $request->getController(true);
+        if ($controller) {
+            $className = $controller.'Controller';
+            $paths = $this->modules->get($request->getModule())->getControllerPaths();
+            $instance = $this->getInstance($request->getModule(true), $className, $paths);
         }
+
+        $instance = $instance ?: new DefaultController();
 
         $instance->setHelperContainer($this->actionHelperContainer);
 
@@ -53,17 +56,18 @@ class MvcLocator
 
     public function getViewModel(MvcRequest $request)
     {
-        $className = $request->getController(true).'ViewModel';
-        $paths = $this->modules->get($request->getModule())->getViewModelPaths();
-        $instance = $this->getInstance($request->getModule(true), $className, $paths);
+        $instance = null;
 
-        if ($instance === null) {
-            $instance = new DefaultViewModel();
+        $controller = $request->getController(true);
+        if ($controller) {
+            $className = $request->getController(true).'ViewModel';
+            $paths = $this->modules->get($request->getModule())->getViewModelPaths();
+            $instance = $this->getInstance($request->getModule(true), $className, $paths);
         }
 
-        if (!$instance->getTemplate()) {
-            $instance->setTemplate($request->getController());
-        }
+        $instance = $instance ?: new DefaultViewModel();
+
+        $instance->setTemplate($request->getTemplate());
 
         return $instance;
     }

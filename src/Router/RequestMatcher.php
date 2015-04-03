@@ -33,15 +33,18 @@ class RequestMatcher
 
         $params = $routeData->getParams();
 
-        $module = $params['_module'];
+        $module = isset($params['_module']) ? $params['_module'] : null;
         unset($params['_module']);
 
-        $controller = $params['_controller'];
+        $controller = isset($params['_controller']) ? $params['_controller'] : null;
         unset($params['_controller']);
 
-        $action = $params['_action'];
+        $action = isset($params['_action']) ? $params['_action'] : null;
         unset($params['_action']);
 
-        return new MvcRequest($routeData->getRouteName(), $module, $controller, $action, $params);
+        $template = isset($params['_template']) ? $params['_template'] : null;
+        unset($params['_template']);
+
+        return new MvcRequest($routeData->getRouteName(), $module, $controller, $action, $params, $template);
     }
 }

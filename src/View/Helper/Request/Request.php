@@ -100,6 +100,27 @@ class Request implements ViewHelperInterface
         return $this->hmvc->execute($request, $language);
     }
 
+    public function template($template, $language = null)
+    {
+        $template = explode(':', $template);
+        switch (count($template)) {
+            case 2:
+                $module = $template[0];
+                $template = $template[1];
+                break;
+            case 1:
+                $module = null;
+                $template = $template[0];
+                break;
+            default:
+                throw new \InvalidArgumentException('$path invalid');
+        }
+
+        $request = new MvcRequest('template', $module, null, null, [], $template);
+
+        return $this->hmvc->execute($request, $language);
+    }
+
     public function request()
     {
         return $this;
