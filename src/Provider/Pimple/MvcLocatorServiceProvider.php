@@ -26,8 +26,7 @@ class MvcLocatorServiceProvider implements ServiceProviderInterface
             return new MvcLocator(
             	$c['module.collection'],
             	$c,
-            	$c['action.helper.container'],
-            	$c['view.helper.container']);
+            	$c['action.helper.container']);
         };
     }
 }
