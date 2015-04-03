@@ -27,5 +27,13 @@ class DefaultRouterServiceProvider implements ServiceProviderInterface
         $container['router.mvc.defaultRouter'] = function ($c) {
             return new DefaultRouter($c['module.collection']->getRoutableModuleNames(), $c['router.mvc.defaultRouter.defaultModule']);
         };
+
+        $container->extend('router.collection', function ($routers, $c) {
+            if (!empty($c['router.mvc.defaultRouter'])) {
+                $routers->add($c['router.mvc.defaultRouter']);
+            }
+
+            return $routers;
+        });
     }
 }

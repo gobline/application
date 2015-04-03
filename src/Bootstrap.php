@@ -93,10 +93,6 @@ class Bootstrap
         $eventDispatcher = $c['eventDispatcher.mvc'];
         $eventDispatcher->dispatch('start');
 
-        if (!empty($c['router.mvc.defaultRouter'])) {
-            $c['router.collection']->add($c['router.mvc.defaultRouter']);
-        }
-
         $c['request.mvc'] = $c['router.mvc.requestMatcher']->match($c['request.http']);
 
         if (!empty($c['error.redirector'])) {
