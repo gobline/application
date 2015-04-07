@@ -31,6 +31,7 @@ use Mendo\Mvc\View\Helper\Form\Form;
 use Mendo\Mvc\View\Helper\Hreflang\Hreflang;
 use Mendo\Mvc\View\Helper\Identity\Identity;
 use Mendo\Mvc\View\Helper\Lang\Lang;
+use Mendo\Mvc\View\Helper\Meta\Meta;
 use Mendo\Mvc\View\Helper\NoIndex\NoIndex;
 use Mendo\Mvc\View\Helper\Placeholder\Placeholder;
 use Mendo\Mvc\View\Helper\Request\Request;
@@ -144,6 +145,10 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
 
             $helpers['lang'] = function () use ($c) {
                 return new Lang($c['eventDispatcher.view'], $c['request.http']);
+            };
+
+            $helpers['meta'] = function () use ($c) {
+                return new Meta($c['eventDispatcher.view']);
             };
 
             $helpers['noIndex'] = function () use ($c) {
