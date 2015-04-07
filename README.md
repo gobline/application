@@ -1,6 +1,6 @@
 # Mendo MVC Framework
 
-Online documentation can be found at http://www.mendoweb.be/mendoframework
+Online documentation can be found at [PHP MVC Framework](http://phpmvcframework.com)
 
 ## System Requirements
 
