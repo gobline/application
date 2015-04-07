@@ -72,7 +72,7 @@ class DbLogWriterServiceProvider implements ServiceProviderInterface
                      $container[$reference.'.column.http_ajax']     => $httpRequest->isAjax(),
                      $container[$reference.'.column.http_json']     => $httpRequest->isJsonRequest(),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
             try {
                 $mvcRequest = $container['request.mvc'];
@@ -85,7 +85,7 @@ class DbLogWriterServiceProvider implements ServiceProviderInterface
                      $container[$reference.'.column.mvc_forwarded']  => $mvcRequest->isForwarded(),
                      $container[$reference.'.column.mvc_dispatched'] => $mvcRequest->isDispatched(),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
             try {
                 $auth = $container['auth'];
@@ -96,7 +96,7 @@ class DbLogWriterServiceProvider implements ServiceProviderInterface
                      $container[$reference.'.column.user_role']          => $auth->getRole(),
                      $container[$reference.'.column.user_data']          => print_r($auth->getData(), true),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
 
             return $data;

@@ -42,7 +42,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
                     'isAjax'           => ($httpRequest->isAjax() ? 'true' : 'false'),
                     'isJsonRequest'    => ($httpRequest->isJsonRequest() ? 'true' : 'false'),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
             try {
                 $mvcRequest = $container['request.mvc'];
@@ -55,7 +55,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
                     'Forwarded'  => $mvcRequest->isForwarded(),
                     'Dispatched' => ($mvcRequest->isDispatched() ? 'true' : 'false'),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
             try {
                 $auth = $container['auth'];
@@ -66,7 +66,7 @@ class WhoopsServiceProvider implements ServiceProviderInterface
                     'Login'         => $auth->getLogin(),
                     'Properties'    => $auth->getProperties(),
                 ]);
-            } catch (Exception $e) {
+            } finally {
             }
         });
 
