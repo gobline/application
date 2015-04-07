@@ -14,7 +14,7 @@ namespace Mendo\Mvc\Provider\Pimple;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Zend\Escaper\Escaper as ZendEscaper;
-use Mendo\Mvc\View\Helper\ActiveMenuClass\ActiveMenuClass;
+use Mendo\Mvc\View\Helper\ActiveMenu\ActiveMenu;
 use Mendo\Mvc\View\Helper\Asset\AssetVersions;
 use Mendo\Mvc\View\Helper\Asset\Collection\CssCollectionFactory;
 use Mendo\Mvc\View\Helper\Asset\Collection\JsCollectionFactory;
@@ -46,7 +46,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['view.helper.activeMenuClass.class'] = 'active';
+        $container['view.helper.activeMenu.class'] = 'active';
         $container['view.helper.css.minifier'] = function ($c) {
             return new Minifier();
         };
@@ -58,8 +58,8 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
         $container['view.helper.container'] = function ($c) {
             $helpers = new Container();
 
-            $helpers['activeMenuClass'] = function () use ($c) {
-                return new ActiveMenuClass($c['request.mvc'], $c['view.helper.activeMenuClass.class']);
+            $helpers['activeMenu'] = function () use ($c) {
+                return new ActiveMenu($c['request.mvc'], $c['view.helper.activeMenu.class']);
             };
 
             $c['assetVersions'] = function ($c) {
