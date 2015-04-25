@@ -31,34 +31,12 @@ class Identity implements ViewHelperInterface
         return $this->user;
     }
 
-    public function setId($id)
-    {
-        return $this->user->setId($id);
-    }
-
-    public function setLogin($login)
-    {
-        return $this->user->setLogin($login);
-    }
-
-    public function setRole($role)
-    {
-        return $this->user->setRole($role);
-    }
-
-    public function setProperties(array $properties)
-    {
-        return $this->user->setProperties($properties);
+        return $this->user;
     }
 
     public function isAuthenticated()
     {
         return $this->user->isAuthenticated();
-    }
-
-    public function clearIdentity()
-    {
-        return $this->user->clearIdentity();
     }
 
     public function getId()
@@ -76,11 +54,6 @@ class Identity implements ViewHelperInterface
         return $this->user->getRole();
     }
 
-    public function setRoleUnauthenticated($role)
-    {
-        return $this->user->setRoleUnauthenticated($role);
-    }
-
     public function hasProperty($name)
     {
         return $this->user->hasProperty($name);
@@ -89,16 +62,6 @@ class Identity implements ViewHelperInterface
     public function getProperty(...$args)
     {
         return $this->user->getProperty(...$args);
-    }
-
-    public function addProperty($name, $value)
-    {
-        return $this->user->addProperty($name, $value);
-    }
-
-    public function removeProperty($name)
-    {
-        return $this->user->removeProperty($name);
     }
 
     public function getProperties()
