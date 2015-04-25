@@ -150,6 +150,12 @@ class Form implements ViewHelperInterface
         return $element;
     }
 
+    public function hasElement($name)
+    {
+        $container = $this->getContainer();
+        return $container->hasComponent($name);
+    }
+
     public function openLabel($element = null, $attributes = null)
     {
         if ($attributes === null) {
