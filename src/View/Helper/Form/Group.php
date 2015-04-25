@@ -20,6 +20,7 @@ class Group
 
     private $name;
     private $form;
+    private $groupLabel = true;
     private $groupLabelAttributes;
     private $groupWrapper;
     private $groupWrapperTagName;
@@ -58,7 +59,9 @@ class Group
             $str .= $this->form->implodeAttributes($rowAttributes).">\n";
         }
 
-        $str .= $this->form->label($element, $this->labelAttributes);
+        if ($this->groupLabel) {
+            $str .= $this->form->label($element, $this->labelAttributes);
+        }
 
         foreach ($element->getSwitches() as $switch) {
 
@@ -146,4 +149,10 @@ class Group
         return $this->groupWrapperAttributes;
     }
 
+    public function setNoGroupLabel()
+    {
+        $this->groupLabel = false;
+
+        return $this;
+    }
 }
