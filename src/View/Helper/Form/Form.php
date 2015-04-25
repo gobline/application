@@ -261,7 +261,7 @@ class Form implements ViewHelperInterface
         return '';
     }
 
-    public function error($name, $attributes)
+    public function error($name, $attributes = null)
     {
         if ($attributes === null) {
             $attributes = $this->errorAttributes ?: ['class' => 'error'];
