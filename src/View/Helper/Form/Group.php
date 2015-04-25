@@ -20,10 +20,10 @@ class Group
 
     private $name;
     private $form;
-    private $groupElementLabelAttributes;
-    private $groupElementWrapper;
-    private $groupElementWrapperTagName;
-    private $groupElementWrapperAttributes;
+    private $groupLabelAttributes;
+    private $groupWrapper;
+    private $groupWrapperTagName;
+    private $groupWrapperAttributes;
 
     public function __construct($name, Form $form)
     {
@@ -62,18 +62,18 @@ class Group
 
         foreach ($element->getSwitches() as $switch) {
 
-            if ($this->groupElementWrapperTagName) {
-                $str .= '<'.$this->groupElementWrapperTagName;
+            if ($this->groupWrapperTagName) {
+                $str .= '<'.$this->groupWrapperTagName;
 
-                $str .= $this->form->implodeAttributes($this->groupElementWrapperAttributes).">\n";
+                $str .= $this->form->implodeAttributes($this->groupWrapperAttributes).">\n";
             }
 
             if ($labelPosition === 'append') {
-                $str .= $this->form->openLabel(null, $this->groupElementLabelAttributes ?: '');
+                $str .= $this->form->openLabel(null, $this->groupLabelAttributes ?: '');
             } elseif ($labelPosition === 'prepend') {
-                $str .= $this->form->openLabel($switch, $this->groupElementLabelAttributes ?: '');
-            } else {
-                $str .= $this->form->label($switch, $this->groupElementLabelAttributes ?: '');
+                $str .= $this->form->openLabel($switch, $this->groupLabelAttributes ?: '');
+            } elseif ($labelPosition === 'default') {
+                $str .= $this->form->label($switch, $this->groupLabelAttributes ?: '');
             }
 
             $str .= $switch;
@@ -84,8 +84,8 @@ class Group
                 $str .= $this->form->closeLabel();
             }
 
-            if ($this->groupElementWrapperTagName) {
-                $str .= '</'.$this->groupElementWrapperTagName.">\n";
+            if ($this->groupWrapperTagName) {
+                $str .= '</'.$this->groupWrapperTagName.">\n";
             }
 
         }
@@ -103,36 +103,38 @@ class Group
         return $str;
     }
 
-    public function setGroupElementLabelAttributes($attributes)
+    public function setGroupLabelAttributes($attributes)
     {
         if (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
 
-        $this->groupElementLabelAttributes = $attributes;
+        $this->groupLabelAttributes = $attributes;
 
         return $this;
     }
 
-    public function setGroupElementWrapper($tagName, $attributes)
+    public function setGroupWrapper($tagName, $attributes)
     {
         if (is_string($attributes)) {
             $attributes = $this->parseAttributes($attributes);
         }
 
-        $this->groupElementWrapperTagName = $tagName;
-        $this->groupElementWrapperAttributes = $attributes;
+        $this->groupWrapperTagName = $tagName;
+        $this->groupWrapperAttributes = $attributes;
 
         return $this;
     }
 
-    public function getGroupElementWrapperTagName()
+    public function getGroupWrapperTagName()
     {
-        return $this->groupElementWrapperTagName;
+        return $this->groupWrapperTagName;
     }
 
-    public function getGroupElementWrapperAttributes()
+
+    public function getGroupWrapperAttributes()
     {
-        return $this->groupElementWrapperAttributes;
+        return $this->groupWrapperAttributes;
     }
+
 }
