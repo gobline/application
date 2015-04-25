@@ -126,11 +126,20 @@ class Group
         return $this;
     }
 
+    public function setGroupWrapperTagName($tagName)
+    {
+        $this->groupWrapperTagName = $tagName;
+    }
+
     public function getGroupWrapperTagName()
     {
         return $this->groupWrapperTagName;
     }
 
+    public function setGroupWrapperAttributes($attributes)
+    {
+        $this->groupWrapperAttributes = $attributes;
+    }
 
     public function getGroupWrapperAttributes()
     {
