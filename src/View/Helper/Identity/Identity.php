@@ -26,10 +26,11 @@ class Identity implements ViewHelperInterface
         $this->user = $user;
     }
 
-    public function identity()
+    public function identity($property = null)
     {
-        return $this->user;
-    }
+        if ($property) {
+            return $this->getProperty($property);
+        }
 
         return $this->user;
     }
