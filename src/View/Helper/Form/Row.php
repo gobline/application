@@ -37,6 +37,8 @@ class Row
         $labelPosition = ($this->labelPosition !== null) ? $this->labelPosition : $this->form->getLabelPosition();
         $printAllErrors = ($this->printAllErrors !== null) ? $this->printAllErrors : $this->form->isPrintAllErrors();
 
+        $element = (string) $this->form->element($this->name, $this->elementAttributes);
+
         if ($rowTagName) {
             $str .= '<'.$rowTagName;
 
@@ -56,11 +58,11 @@ class Row
             $str .= $this->form->openLabel(null, $this->labelAttributes);
         } elseif ($labelPosition === 'prepend') {
             $str .= $this->form->openLabel($this->name, $this->labelAttributes);
-        } else {
+        } elseif ($labelPosition === 'default') {
             $str .= $this->form->label($this->name, $this->labelAttributes);
         }
 
-        $str .= $this->form->element($this->name, $this->elementAttributes);
+        $str .= $element;
 
         if ($labelPosition === 'append') {
             $str .= $this->form->closeLabel($this->name);
@@ -79,5 +81,12 @@ class Row
         }
 
         return $str;
+    }
+
+    public function setNoLabel()
+    {
+        $this->labelPosition = 'none';
+
+        return $this;
     }
 }
