@@ -55,7 +55,7 @@ class Url implements ViewHelperInterface
         if (!$data) {
             $data = [];
         } elseif (!is_array($data)) {
-            $data = $this->makeKeyValuePairs(explode('/', $data));
+            $data = $this->makeKeyValuePairs(explode('/', ltrim($data, '/')));
         }
 
         $request = new MvcRequest('default', $module, $controller, $action, $data);
@@ -72,7 +72,7 @@ class Url implements ViewHelperInterface
     public function route($route, $data, $language = null, $absolute = false)
     {
         if (!is_array($data)) {
-            $data = $this->makeKeyValuePairs(explode('/', $data));
+            $data = $this->makeKeyValuePairs(explode('/', ltrim($data, '/')));
         }
 
         if (isset($data['_module'])) {
@@ -108,7 +108,7 @@ class Url implements ViewHelperInterface
         $action = $this->request->getAction();
 
         if (!is_array($data)) {
-            $data = $this->makeKeyValuePairs(explode('/', $data));
+            $data = $this->makeKeyValuePairs(explode('/', ltrim($data, '/')));
         }
 
         $request = new MvcRequest('default', $module, $controller, $action, $data);
