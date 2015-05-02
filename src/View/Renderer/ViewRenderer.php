@@ -35,7 +35,7 @@ class ViewRenderer implements ViewRendererInterface
             }
         }
 
-        throw new \RuntimeException('No matching renderer for request "' . $httpRequest->getUrl(true) . '"');
+        throw new \RuntimeException('No matching renderer for request "' . $this->httpRequest->getUrl(true) . '"');
     }
 
     public function isRenderable(AbstractViewModel $model)
