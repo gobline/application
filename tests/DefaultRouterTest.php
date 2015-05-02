@@ -20,7 +20,7 @@ class DefaultRouterTest extends PHPUnit_Framework_TestCase
         $requestMatcher = new RequestMatcher($routers);
         $urlMaker = new UrlMaker($routers);
 
-        $routeData = $requestMatcher->match(new StringHttpRequest('http://example.com/profile'));
+        $routeData = $requestMatcher->match(new StringHttpRequest('http://example.com/profile?foo='));
 
         $this->assertInstanceOf('Mendo\Router\RouteData', $routeData);
         $this->assertSame('default', $routeData->getRouteName());
