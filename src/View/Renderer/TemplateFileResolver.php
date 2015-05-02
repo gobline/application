@@ -38,10 +38,10 @@ class TemplateFileResolver
         return $this->getFile($template, 'partials/');
     }
 
-    public function getTemplate($template)
+    public function getTemplate($template, $format = 'html')
     {
         try {
-            return $this->getFile($template, 'templates/');
+            return $this->getFile($template, 'templates/', $format);
         } catch(Exception\TemplateFileNotFoundException $e) {
             throw new Exception\TemplateFileNotFoundException($e->getMessage(), 404);
         }

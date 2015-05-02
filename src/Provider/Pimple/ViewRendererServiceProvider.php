@@ -17,6 +17,7 @@ use Mendo\Mvc\View\Renderer\ViewRenderer;
 use Mendo\Mvc\View\Renderer\Html\HtmlMasterLayoutRenderer;
 use Mendo\Mvc\View\Renderer\Html\HtmlLayoutRenderer;
 use Mendo\Mvc\View\Renderer\Html\HtmlTemplateRenderer;
+use Mendo\Mvc\View\Renderer\Json\JsonRenderer;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -40,6 +41,10 @@ class ViewRendererServiceProvider implements ServiceProviderInterface
                 $renderer->addRenderer($c['view.renderer.html.templateRenderer']);
             }
 
+            if (!empty($c['view.renderer.html.jsonRenderer'])) {
+                $renderer->addRenderer($c['view.renderer.html.jsonRenderer']);
+            }
+
             return $renderer;
         };
 
@@ -60,6 +65,10 @@ class ViewRendererServiceProvider implements ServiceProviderInterface
 
         $container['view.renderer.html.templateRenderer'] = function ($c) {
             return new HtmlTemplateRenderer($c['view.helper.container'], $c['view.templateFileResolver']);
+        };
+
+        $container['view.renderer.html.jsonRenderer'] = function ($c) {
+            return new JsonRenderer($c['view.templateFileResolver']);
         };
     }
 }

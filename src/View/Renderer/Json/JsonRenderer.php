@@ -15,14 +15,18 @@ use Mendo\Mvc\ViewModel\AbstractViewModel;
 use Mendo\Mvc\View\Renderer\ViewRendererMatcherInterface;
 use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Http\Request\HttpRequestInterface;
+use Mendo\Mvc\View\Renderer\TemplateFileResolver;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
 class JsonRenderer implements ViewRendererMatcherInterface
 {
-    public function __construct()
+    private $templateResolver;
+
+    public function __construct(TemplateFileResolver $templateResolver)
     {
+        $this->templateResolver = $templateResolver;
     }
 
     public function match(HttpRequestInterface $httpRequest, MvcRequest $mvcRequest)
@@ -30,11 +34,15 @@ class JsonRenderer implements ViewRendererMatcherInterface
         return $httpRequest->isJsonRequest();
     }
 
-    public function render(AbstractViewModel $viewModel)
+    public function render(AbstractViewModel $model)
     {
+        $content = include $this->templateResolver->getTemplate($model->getTemplate(), 'json');
+
+        echo json_encode($content);
     }
 
     public function isRenderable(AbstractViewModel $model)
     {
+        return true;
     }
 }
