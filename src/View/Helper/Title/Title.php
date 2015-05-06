@@ -39,6 +39,11 @@ class Title extends AbstractViewEventSubscriber implements ViewHelperInterface
 
     public function suffix($suffix)
     {
+        if (!$suffix) {
+            $this->suffix = '';
+            return;
+        }
+
         $this->suffix = $suffix . $this->suffix;
     }
 
