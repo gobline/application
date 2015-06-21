@@ -281,10 +281,14 @@ class Form implements ViewHelperInterface
         return '';
     }
 
-    public function hasErrors($name)
+    public function hasErrors($name, $return = null)
     {
         $container = $this->getContainer();
         $element = $container->getComponent($name);
+
+        if ($return) {
+            return $element->hasErrors() ? $return : '';
+        }
 
         return $element->hasErrors();
     }
