@@ -29,12 +29,22 @@ class Flash implements FlashInterface, ActionHelperInterface, IteratorAggregate
 
     public function flash($name, $value)
     {
-        $this->flash->add($name, $value);
+        $this->flash->next($name, $value);
     }
 
-    public function add($name, $value)
+    public function now($name, $value)
     {
-        $this->flash->add($name, $value);
+        $this->flash->now($name, $value);
+    }
+
+    public function next($name, $value)
+    {
+        $this->flash->next($name, $value);
+    }
+
+    public function keep()
+    {
+        $this->flash->keep();
     }
 
     public function has($name)
@@ -57,8 +67,8 @@ class Flash implements FlashInterface, ActionHelperInterface, IteratorAggregate
         return $this->flash->getArrayCopy();
     }
 
-    public function keep()
+    public function count()
     {
-        $this->flash->keep();
+        $this->flash->count();
     }
 }
