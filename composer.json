@@ -31,6 +31,7 @@
         "mendoframework/form": "dev-master",
         "mendoframework/http": "dev-master",
         "mendoframework/mediator": "dev-master",
+        "mendoframework/registrar": "dev-master",
         "mendoframework/router": "dev-master",
         "mendoframework/session": "dev-master",
         "mendoframework/translator": "dev-master",
@@ -43,7 +44,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.7.x-dev"
+            "dev-master": "0.8.x-dev"
         }
     }
 }
