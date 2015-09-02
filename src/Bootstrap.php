@@ -24,7 +24,7 @@ class Bootstrap
     {
         $this->container = $c;
 
-        $errorHandler = $c['error.handler']; // set default error and exception handlers
+        $errorCatcher = $c['error.catcher']; // set default error and exception handlers
 
         $eventDispatcher = $c['eventDispatcher.mvc'];
         $eventDispatcher->dispatch('start');
@@ -32,7 +32,7 @@ class Bootstrap
         $c['request.mvc'] = $c['router.mvc.requestMatcher']->match($c['request.http']);
 
         if (!empty($c['error.redirector'])) {
-            $errorHandler->setErrorRedirector($c['error.redirector']);
+            $errorCatcher->setErrorHandler($c['error.redirector']);
         } else {
             $c['whoops']->register();
         }

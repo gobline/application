@@ -15,11 +15,12 @@ use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Mvc\Request\Authorizer;
 use Mendo\Mvc\Request\Forwarder;
 use Mendo\Mvc\Request\Redirector;
+use Mendo\Error\ErrorHandlerInterface;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
-class ErrorRedirector
+class ErrorRedirector implements ErrorHandlerInterface
 {
     private $request;
     private $authorizer;
@@ -38,7 +39,7 @@ class ErrorRedirector
         $this->redirector = $redirector;
     }
 
-    public function redirect(\Exception $e)
+    public function handle(\Exception $e)
     {
         $code = ($e->getCode() === 0) ? 500 : $e->getCode();
 

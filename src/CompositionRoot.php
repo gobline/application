@@ -17,13 +17,13 @@ use Mendo\Auth\Provider\Pimple\AuthServiceProvider;
 use Mendo\Filter\Provider\Pimple\FunnelFactoryServiceProvider;
 use Mendo\Flash\Provider\Pimple\FlashServiceProvider;
 use Mendo\Http\Provider\Pimple\HttpRequestServiceProvider;
+use Mendo\Error\Provider\Pimple\ErrorCatcherServiceProvider;
 use Mendo\Mediator\Provider\Pimple\EventDispatcherServiceProvider;
 use Mendo\Router\Provider\Pimple\RouterServiceProvider;
 use Mendo\Session\Provider\Pimple\SessionServiceProvider;
 use Mendo\Translator\Provider\Pimple\TranslatorServiceProvider;
 use Mendo\Mvc\Provider\Pimple\ActionHelperContainerServiceProvider;
 use Mendo\Mvc\Provider\Pimple\DefaultRouterServiceProvider;
-use Mendo\Mvc\Provider\Pimple\ErrorHandlerServiceProvider;
 use Mendo\Mvc\Provider\Pimple\ErrorRedirectorServiceProvider;
 use Mendo\Mvc\Provider\Pimple\HmvcRequestServiceProvider;
 use Mendo\Mvc\Provider\Pimple\LayoutsServiceProvider;
@@ -54,6 +54,7 @@ class CompositionRoot extends Container
         $this->register(new AuthServiceProvider('auth'));
         $this->register(new AclServiceProvider('acl.routes'));
         $this['acl.routes.defaultResourceMatcher'] = 'startsWith';
+        $this->register(new ErrorCatcherServiceProvider('error.catcher'));
         $this->register(new EventDispatcherServiceProvider('eventDispatcher.view'));
         $this->register(new EventDispatcherServiceProvider('eventDispatcher.mvc'));
         $this->register(new RouterServiceProvider());
@@ -65,7 +66,6 @@ class CompositionRoot extends Container
 
         $this->register(new ActionHelperContainerServiceProvider());
         $this->register(new DefaultRouterServiceProvider());
-        $this->register(new ErrorHandlerServiceProvider());
         $this->register(new ErrorRedirectorServiceProvider());
         $this->register(new HmvcRequestServiceProvider());
         $this->register(new LayoutsServiceProvider());
