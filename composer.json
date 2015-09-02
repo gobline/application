@@ -26,6 +26,7 @@
         "pimple/pimple": "3.0.*@dev",
         "mendoframework/acl": "dev-master",
         "mendoframework/auth": "dev-master",
+        "mendoframework/error": "dev-master",
         "mendoframework/filter": "dev-master",
         "mendoframework/flash": "dev-master",
         "mendoframework/form": "dev-master",
@@ -44,7 +45,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.8.x-dev"
+            "dev-master": "0.9.x-dev"
         }
     }
 }
