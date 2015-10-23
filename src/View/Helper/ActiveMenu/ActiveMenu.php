@@ -81,7 +81,7 @@ class ActiveMenu implements ViewHelperInterface
                 throw new \InvalidArgumentException('$route invalid');
         }
 
-        if ($queryData && array_diff($queryData, $this->httpRequest->getQuery())) {
+        if ($queryData && array_diff_assoc($queryData, $this->httpRequest->getQuery())) {
             return '';
         }
 
@@ -109,7 +109,7 @@ class ActiveMenu implements ViewHelperInterface
             return $this->class;
         }
 
-        if (array_diff($params, $this->mvcRequest->getParams())) {
+        if (array_diff_assoc($params, $this->mvcRequest->getParams())) {
             return '';
         }
 
