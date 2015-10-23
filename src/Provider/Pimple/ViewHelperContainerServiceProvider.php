@@ -61,7 +61,7 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
             $helpers = new Container();
 
             $helpers['activeMenu'] = function () use ($c) {
-                return new ActiveMenu($c['request.mvc'], $c['view.helper.activeMenu.class']);
+                return new ActiveMenu($c['request.mvc'], $c['request.http'], $c['view.helper.activeMenu.class']);
             };
 
             $c['assetVersions'] = function ($c) {

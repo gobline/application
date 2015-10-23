@@ -13,6 +13,7 @@ namespace Mendo\Mvc\View\Helper\ActiveMenu;
 
 use Mendo\Mvc\View\Helper\ViewHelperInterface;
 use Mendo\Mvc\Request\MvcRequest;
+use Mendo\Http\Request\HttpRequest;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
@@ -20,11 +21,13 @@ use Mendo\Mvc\Request\MvcRequest;
 class ActiveMenu implements ViewHelperInterface
 {
     private $mvcRequest;
+    private $httpRequest;
     private $class;
 
-    public function __construct(MvcRequest $mvcRequest, $class = 'active')
+    public function __construct(MvcRequest $mvcRequest, HttpRequest $httpRequest, $class = 'active')
     {
         $this->mvcRequest = $mvcRequest;
+        $this->httpRequest = $httpRequest;
         $this->class = $class;
     }
 
@@ -47,25 +50,39 @@ class ActiveMenu implements ViewHelperInterface
 
     public function activeMenu($route)
     {
+        $queryData = [];
+        if (strpos($route, '?') !== false) {
+            list($route, $queryString) = explode('?', $route);
+            $parts = parse_url('?'.$queryString);
+            if (array_key_exists('query', $parts)) {
+                parse_str($parts['query'], $queryData);
+            }
+        }
+
         $route = explode('/', $route);
+
+        $module = null;
+        $controller = null;
+        $action = null;
+        $params = [];
+
         switch (count($route)) {
+            default: 
+                $params = array_slice($route, 3);
+                $params = $this->makeKeyValuePairs($params);
             case 3:
-                $module = $route[0];
-                $controller = $route[1];
                 $action = $route[2];
-                break;
             case 2:
-                $module = $route[0];
                 $controller = $route[1];
-                $action = null;
-                break;
             case 1:
                 $module = $route[0];
-                $controller = null;
-                $action = null;
                 break;
-            default:
+            case 0:
                 throw new \InvalidArgumentException('$route invalid');
+        }
+
+        if ($queryData && array_diff($queryData, $this->httpRequest->getQuery())) {
+            return '';
         }
 
         if ($module !== $this->mvcRequest->getModule()) {
@@ -88,11 +105,33 @@ class ActiveMenu implements ViewHelperInterface
             return '';
         }
 
+        if (!$params) {
+            return $this->class;
+        }
+
+        if (array_diff($params, $this->mvcRequest->getParams())) {
+            return '';
+        }
+
         return $this->class;
     }
 
     private function startsWith($haystack, $needle)
     {
         return $needle === '' || strpos($haystack, $needle) === 0;
+    }
+
+    private function makeKeyValuePairs(array $array)
+    {
+        $pairs = [];
+        $nb = count($array);
+        for ($i = 0; $i < $nb - 1; $i += 2) {
+            $pairs[$array[$i]] = $array[$i+1];
+        }
+        if ($i < $nb) {
+            $pairs[$array[$i]] = '';
+        }
+
+        return $pairs;
     }
 }
