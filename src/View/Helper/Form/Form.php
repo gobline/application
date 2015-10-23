@@ -138,7 +138,7 @@ class Form implements ViewHelperInterface
         }
 
         if (!$element->hasAttribute('id')) {
-            $element->setAttribute('id', $this->hyphenate($element->getAttribute('name')).'-id');
+            $element->setAttribute('id', 'form-element-'.$this->hyphenate($element->getAttribute('name')));
         }
 
         if ($element->hasAttribute('placeholder') && $this->translator) {
@@ -229,7 +229,7 @@ class Form implements ViewHelperInterface
         }
 
         if (!isset($attributes['for'])) {
-            $attributes['for'] = $this->hyphenate($element->getAttribute('name')).'-id';
+            $attributes['for'] = 'form-element-'.$this->hyphenate($element->getAttribute('name'));
         }
 
         return $this->openLabel(null, $attributes).$label."</label>\n";
@@ -311,7 +311,6 @@ class Form implements ViewHelperInterface
         $str = preg_replace('/[^a-z0-9]+/i', ' ', $str);
         $str = trim($str);
         $str = str_replace(" ", "-", $str);
-        $str = strtolower($str);
 
         return $str;
     }
