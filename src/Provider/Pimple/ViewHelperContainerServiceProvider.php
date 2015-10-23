@@ -27,6 +27,7 @@ use Mendo\Mvc\View\Helper\Description\Description;
 use Mendo\Mvc\View\Helper\Env\Env;
 use Mendo\Mvc\View\Helper\Escape\Escape;
 use Mendo\Mvc\View\Helper\Find\Find;
+use Mendo\Mvc\View\Helper\Flash\Flash;
 use Mendo\Mvc\View\Helper\Form\Form;
 use Mendo\Mvc\View\Helper\Hreflang\Hreflang;
 use Mendo\Mvc\View\Helper\Identity\Identity;
@@ -121,6 +122,10 @@ class ViewHelperContainerServiceProvider implements ServiceProviderInterface
 
             $helpers['find'] = function () use ($c) {
                 return new Find($c['request.mvc'], $c['request.http'], $c['flash']);
+            };
+
+            $helpers['flash'] = function () use ($c) {
+                return new Flash($c['flash']);
             };
 
             $helpers['form'] = function () use ($c) {
