@@ -27,7 +27,7 @@ class Row
         $this->form = $form;
     }
 
-    public function __toString()
+    public function render()
     {
         $str = '';
 
@@ -37,7 +37,7 @@ class Row
         $labelPosition = ($this->labelPosition !== null) ? $this->labelPosition : $this->form->getLabelPosition();
         $printAllErrors = ($this->printAllErrors !== null) ? $this->printAllErrors : $this->form->isPrintAllErrors();
 
-        $element = (string) $this->form->element($this->name, $this->elementAttributes);
+        $element = $this->form->element($this->name, $this->elementAttributes)->__toString();
 
         if ($rowTagName) {
             $str .= '<'.$rowTagName;
@@ -78,6 +78,20 @@ class Row
 
         if ($rowTagName) {
             $str .= '</'.$rowTagName.">\n";
+        }
+
+        return $str;
+    }
+
+    public function __toString()
+    {
+        try {
+            $str = $this->render();
+        } catch (\Exception $exception) {
+            $previousHandler = set_exception_handler(function (){});
+            restore_error_handler();
+            call_user_func($previousHandler, $exception);
+            die;
         }
 
         return $str;
