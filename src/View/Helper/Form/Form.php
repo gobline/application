@@ -33,11 +33,6 @@ class Form implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function form()
-    {
-        return $this;
-    }
-
     public function open(ModelForm $form, $attributes = [])
     {
         if ($this->containers) {

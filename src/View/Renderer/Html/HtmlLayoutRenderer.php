@@ -23,6 +23,8 @@ use Mendo\Http\Request\HttpRequestInterface;
  */
 class HtmlLayoutRenderer implements ViewRendererMatcherInterface
 {
+    use ViewHelperTrait;
+
     private $htmlRenderer;
     private $templateResolver;
     private $layouts;
@@ -39,16 +41,6 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
         $this->layouts = $layouts;
     }
 
-    public function __get($name)
-    {
-        return $this->htmlRenderer->$name;
-    }
-
-    public function __call($method, array $arguments)
-    {
-        return call_user_func_array([$this->htmlRenderer, $method], $arguments);
-    }
-
     public function content()
     {
         ob_start();
@@ -56,6 +48,8 @@ class HtmlLayoutRenderer implements ViewRendererMatcherInterface
             if ($this->layoutsIterator->current()) {
                 $layout = $this->layoutsIterator->current();
                 $this->layoutsIterator->next();
+
+                extract($this->getViewHelpers());
 
                 include $this->templateResolver->getLayout($layout);
             } else {

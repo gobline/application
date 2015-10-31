@@ -26,13 +26,8 @@ class BaseUrl implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function baseUrl()
-    {
-        return $this->request->getBaseUrl();
-    }
-
     public function __toString()
     {
-        return $this->baseUrl();
+        return $this->request->getBaseUrl();
     }
 }

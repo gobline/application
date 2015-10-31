@@ -27,9 +27,13 @@ class Responsive extends AbstractViewEventSubscriber implements ViewHelperInterf
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function responsive()
+    public function __invoke($responsive = true)
     {
-        $this->eventDispatcher->addSubscriber($this);
+        if ($responsive) {
+            $this->eventDispatcher->addSubscriber($this);
+        } else {
+            $this->eventDispatcher->removeSubscriber($this);
+        }
     }
 
     public function onMeta()

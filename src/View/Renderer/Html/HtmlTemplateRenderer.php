@@ -16,32 +16,19 @@ use Mendo\Mvc\View\Renderer\ViewRendererMatcherInterface;
 use Mendo\Mvc\View\Renderer\TemplateFileResolver;
 use Mendo\Mvc\Request\MvcRequest;
 use Mendo\Http\Request\HttpRequestInterface;
-use Pimple\Container;
 
 /**
  * @author Mathieu Decaffmeyer <mdecaffmeyer@gmail.com>
  */
 class HtmlTemplateRenderer implements ViewRendererMatcherInterface
 {
-    private $helperContainer;
+    use ViewHelperTrait;
+
     private $templateResolver;
 
-    public function __construct(Container $helperContainer, TemplateFileResolver $templateResolver)
+    public function __construct(TemplateFileResolver $templateResolver)
     {
-        $this->helperContainer = $helperContainer;
         $this->templateResolver = $templateResolver;
-    }
-
-    public function __get($helperName)
-    {
-        return $this->helperContainer[$helperName];
-    }
-
-    public function __call($helperName, array $arguments)
-    {
-        $helper = $this->helperContainer[$helperName];
-
-        return call_user_func_array([$helper, $helperName], $arguments);
     }
 
     public function partial($template, array $data = [])
@@ -62,6 +49,8 @@ class HtmlTemplateRenderer implements ViewRendererMatcherInterface
     {
         ob_start();
         try {
+            extract($this->getViewHelpers());
+
             include $this->templateResolver->getTemplate($model->getTemplate());
         } finally {
             $content = ob_get_clean();

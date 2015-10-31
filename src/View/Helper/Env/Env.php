@@ -28,13 +28,14 @@ class Env implements ViewHelperInterface
         }
     }
 
-    public function env($env = null)
+    public function is($env)
     {
-        if ($env) {
-            return $env === $this->env;
-        }
+        return $env === $this->env;
+    }
 
-        return $this->env;
+    public function __get($name)
+    {
+        return $this->is($name);
     }
 
     public function __toString()

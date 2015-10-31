@@ -27,9 +27,13 @@ class NoIndex extends AbstractViewEventSubscriber implements ViewHelperInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function noIndex()
+    public function __invoke($noIndex = true)
     {
-        $this->eventDispatcher->addSubscriber($this);
+        if ($noIndex) {
+            $this->eventDispatcher->addSubscriber($this);
+        } else {
+            $this->eventDispatcher->removeSubscriber($this);
+        }
     }
 
     public function onMeta()

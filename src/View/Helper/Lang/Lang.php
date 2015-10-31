@@ -30,9 +30,13 @@ class Lang extends AbstractViewEventSubscriber implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function lang()
+    public function __invoke($lang = true)
     {
-        $this->eventDispatcher->addSubscriber($this);
+        if ($lang) {
+            $this->eventDispatcher->addSubscriber($this);
+        } else {
+            $this->eventDispatcher->removeSubscriber($this);
+        }
 
         return $this->request->getLanguage();
     }
@@ -54,6 +58,6 @@ class Lang extends AbstractViewEventSubscriber implements ViewHelperInterface
 
     public function __toString()
     {
-        return $this->lang();
+        return $this->request->getLanguage();
     }
 }

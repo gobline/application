@@ -39,12 +39,16 @@ class Hreflang extends AbstractViewEventSubscriber implements ViewHelperInterfac
         $this->languages = $languages;
     }
 
-    public function hreflang()
+    public function __invoke($hreflang = true)
     {
-        if (count($this->languages) < 2) {
-            return;
+        if ($hreflang) {
+            if (count($this->languages) < 2) {
+                return;
+            }
+            $this->eventDispatcher->addSubscriber($this);
+        } else {
+            $this->eventDispatcher->removeSubscriber($this);
         }
-        $this->eventDispatcher->addSubscriber($this);
     }
 
     public function onHeadLinks()
