@@ -29,12 +29,12 @@ class Title extends AbstractViewEventSubscriber implements ViewHelperInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function title($title)
+    public function __invoke($title)
     {
         if (!$this->title) {
-            $this->title = (string) $title;
             $this->eventDispatcher->addSubscriber($this);
         }
+        $this->title = (string) $title;
     }
 
     public function suffix($suffix)

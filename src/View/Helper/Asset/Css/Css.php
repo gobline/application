@@ -36,7 +36,7 @@ class Css extends AbstractAssetHelper implements ViewHelperInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function css($path, $isModuleAsset = false, $ieConditionalComment = null)
+    public function __invoke($path, $isModuleAsset = false, $ieConditionalComment = null)
     {
         $this->asset = new Style($path, $isModuleAsset, $ieConditionalComment);
         $this->eventDispatcher->addSubscriber($this);

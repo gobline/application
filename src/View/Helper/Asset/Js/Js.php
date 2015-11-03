@@ -36,7 +36,7 @@ class Js extends AbstractAssetHelper implements ViewHelperInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function js($path, $location = 'body', $isModuleAsset = false, $ieConditionalComment = null)
+    public function __invoke($path, $location = 'body', $isModuleAsset = false, $ieConditionalComment = null)
     {
         $this->asset = new Script($path, $location, $isModuleAsset, $ieConditionalComment);
         $this->eventDispatcher->addSubscriber($this);

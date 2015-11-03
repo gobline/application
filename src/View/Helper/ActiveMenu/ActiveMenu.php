@@ -48,7 +48,7 @@ class ActiveMenu implements ViewHelperInterface
         return $this->class;
     }
 
-    public function activeMenu($route)
+    public function __invoke($route)
     {
         $queryData = [];
         if (strpos($route, '?') !== false) {

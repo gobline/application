@@ -21,26 +21,30 @@ use Mendo\Mediator\EventDispatcherInterface;
 class Meta extends AbstractViewEventSubscriber implements ViewHelperInterface
 {
     private $eventDispatcher;
-    private $attributes;
+    private $metas = [];
 
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function meta(array $attributes)
+    public function __invoke(array $attributes)
     {
-        $this->attributes = $attributes;
-        $this->eventDispatcher->addSubscriber($this);
+        if (!$this->metas) {
+            $this->eventDispatcher->addSubscriber($this);
+        }
+        $this->metas[] = $attributes;
     }
 
     public function onMeta()
     {
-        echo '<meta';
-        foreach ($this->attributes as $attributeName => $attributeValue) {
-            echo ' '.$attributeName.'="'.$attributeValue.'"';
+        foreach ($this->metas as $meta) {
+            echo '<meta';
+            foreach ($meta as $attributeName => $attributeValue) {
+                echo ' '.$attributeName.'="'.$attributeValue.'"';
+            }
+            echo ">\n";
         }
-        echo ">\n";
     }
 
     public function getSubscribedEvents()

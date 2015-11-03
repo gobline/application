@@ -26,13 +26,9 @@ class Identity implements ViewHelperInterface
         $this->user = $user;
     }
 
-    public function identity($property = null)
+    public function __get($property)
     {
-        if ($property) {
-            return $this->getProperty($property);
-        }
-
-        return $this->user;
+        return $this->getProperty($property);
     }
 
     public function isAuthenticated()

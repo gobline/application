@@ -121,11 +121,6 @@ class Request implements ViewHelperInterface
         return $this->hmvc->execute($request, $language);
     }
 
-    public function request()
-    {
-        return $this;
-    }
-
     private function makeKeyValuePairs(array $array)
     {
         $pairs = [];

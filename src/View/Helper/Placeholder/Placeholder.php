@@ -20,7 +20,7 @@ class Placeholder implements ViewHelperInterface
 {
     private $container = [];
 
-    public function placeholder(...$args)
+    public function __invoke(...$args)
     {
         return $this->get(...$args);
     }

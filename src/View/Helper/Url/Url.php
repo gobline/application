@@ -29,7 +29,7 @@ class Url implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function url($path, $data = null, $language = null, $absolute = false)
+    public function __invoke($path, $data = null, $language = null, $absolute = false)
     {
         $path = explode('/', $path);
         switch (count($path)) {

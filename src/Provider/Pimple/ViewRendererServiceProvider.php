@@ -57,14 +57,20 @@ class ViewRendererServiceProvider implements ServiceProviderInterface
         };
 
         $container['view.renderer.html.layoutRenderer'] = function ($c) {
-            return new HtmlLayoutRenderer(
+            $renderer = new HtmlLayoutRenderer(
                 $c['view.renderer.html.templateRenderer'],
                 $c['view.templateFileResolver'],
                 $c['layouts']);
+            $renderer->setHelperContainer($c['view.helper.container']);
+
+            return $renderer;
         };
 
         $container['view.renderer.html.templateRenderer'] = function ($c) {
-            return new HtmlTemplateRenderer($c['view.helper.container'], $c['view.templateFileResolver']);
+            $renderer = new HtmlTemplateRenderer($c['view.templateFileResolver']);
+            $renderer->setHelperContainer($c['view.helper.container']);
+
+            return $renderer;
         };
 
         $container['view.renderer.html.jsonRenderer'] = function ($c) {

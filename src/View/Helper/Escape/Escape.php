@@ -26,7 +26,7 @@ class Escape implements ViewHelperInterface
         $this->escaper = $escaper;
     }
 
-    public function escape($string)
+    public function __invoke($string)
     {
         return $this->html($string);
     }

@@ -28,12 +28,12 @@ class Description extends AbstractViewEventSubscriber implements ViewHelperInter
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function description($description)
+    public function __invoke($description)
     {
         if (!$this->description) {
-            $this->description = (string) $description;
             $this->eventDispatcher->addSubscriber($this);
         }
+        $this->description = (string) $description;
     }
 
     public function onMeta()

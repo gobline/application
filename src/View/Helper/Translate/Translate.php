@@ -29,7 +29,7 @@ class Translate implements ViewHelperInterface
         $this->request = $request;
     }
 
-    public function translate($str, array $params = null, $language = null)
+    public function __invoke($str, array $params = null, $language = null)
     {
         if (!$language) {
             $language = $this->request->getLanguage() ?: null;

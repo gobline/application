@@ -35,7 +35,7 @@ class Find implements ViewHelperInterface
         $this->flash = $flash;
     }
 
-    public function find(...$args)
+    public function __invoke(...$args)
     {
         if (count($args) !== 1 && count($args) !== 2) {
             throw new \InvalidArgumentException('find() takes one or two arguments');
