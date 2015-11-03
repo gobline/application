@@ -24,22 +24,19 @@ class Dispatcher
     private $authorizer;
     private $mvcLocator;
     private $defaultViewRenderer;
-    private $mustMapRouteParamsToActionArguments;
 
     public function __construct(
         MvcRequest $request,
         Authorizer $authorizer,
         MvcLocator $mvcLocator,
         ViewRendererInterface $defaultViewRenderer,
-        EventDispatcher $eventDispatcher,
-        $mustMapRouteParamsToActionArguments = true
+        EventDispatcher $eventDispatcher
     ) {
         $this->request = $request;
         $this->authorizer = $authorizer;
         $this->mvcLocator = $mvcLocator;
         $this->defaultViewRenderer = $defaultViewRenderer;
         $this->eventDispatcher = $eventDispatcher;
-        $this->mustMapRouteParamsToActionArguments = (bool) $mustMapRouteParamsToActionArguments;
     }
 
     public function dispatch(ViewRendererInterface $viewRenderer = null)
@@ -57,11 +54,7 @@ class Dispatcher
         $action = $this->request->getAction(true);
 
         if (method_exists($controller, $action)) {
-            if ($this->mustMapRouteParamsToActionArguments) {
-                call_user_func_array([$controller, $action], $this->request->getParams());
-            } else {
-                $controller->$action();
-            }
+            $controller->$action(...array_values($this->request->getParams()));
         }
 
         $this->eventDispatcher->dispatch('afterDispatch');
