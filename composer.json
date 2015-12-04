@@ -28,7 +28,8 @@
         "gobline/auth": "~2.0",
         "gobline/acl": "~2.0",
         "gobline/view": "~1.0",
-        "filp/whoops": "^1.1"
+        "filp/whoops": "^1.1",
+        "zendframework/zend-diactoros": "^1.2"
     },
     "extra": {
         "branch-alias": {
