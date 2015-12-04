@@ -1,0 +1,13 @@
+<?php
+
+$finder = Symfony\CS\Finder\DefaultFinder::create()
+    ->in(__DIR__)
+;
+
+return Symfony\CS\Config\Config::create()
+    ->setRules(array(
+        '@Symfony' => true,
+        'empty_return' => false,
+    ))
+    ->finder($finder)
+;
