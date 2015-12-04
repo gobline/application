@@ -29,7 +29,8 @@
         "gobline/acl": "~2.0",
         "gobline/view": "~1.0",
         "filp/whoops": "^1.1",
-        "zendframework/zend-diactoros": "^1.2"
+        "zendframework/zend-diactoros": "^1.2",
+        "relay/relay": "^1.0"
     },
     "extra": {
         "branch-alias": {
