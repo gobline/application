@@ -42,6 +42,10 @@ class AuthorizerMiddleware
 
         $userRole = $this->currentUser->getRole();
 
+        if (!$userRole) {
+            throw new NotAuthenticatedException();
+        }
+
         if (
             !$this->acl->hasRole($requiredRole) ||
             !$this->acl->hasRole($userRole) ||
