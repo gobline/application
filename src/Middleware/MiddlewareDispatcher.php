@@ -37,8 +37,12 @@ class MiddlewareDispatcher
         $this->container = $container;
         $this->environment = $environment;
 
-        $resolver = function ($className) use ($container) {
-            return $container->get($className);
+        $resolver = function ($middleware) use ($container) {
+            if (is_string($middleware)) {
+                return $container->get($middleware);
+            }
+
+            return $middleware;
         };
         $this->relayBuilder = new RelayBuilder($resolver);
     }
@@ -55,9 +59,11 @@ class MiddlewareDispatcher
             if ($this->environment->isDebugMode()) {
                 $handler = $this->container->get(WhoopsHandler::class);
             } else {
-                foreach ($this->errorHandlers as $exceptionClassName => $handlerClassName) {
+                foreach ($this->errorHandlers as $exceptionClassName => $handler) {
                     if (is_a($e, $exceptionClassName)) {
-                        $handler = $this->container->get($handlerClassName);
+                        if (is_string($handler)) {
+                            $handler = $this->container->get($handler);
+                        }
                         break;
                     }
                 }
@@ -86,20 +92,24 @@ class MiddlewareDispatcher
         return $response;
     }
 
-    public function addErrorHandler($exceptionClassName, $handlerClassName)
+    public function addErrorHandler($exceptionClassName, $handler)
     {
-        $this->errorHandlers[$exceptionClassName] = $handlerClassName;
+        $this->errorHandlers[$exceptionClassName] = $handler;
+
+        return $this;
     }
 
     public function addMiddleware($middleware)
     {
         $this->middlewares[] = $middleware;
+
+        return $this;
     }
 
     public function setErrorHandlers(array $handlers)
     {
-        foreach ($handlers as $exceptionClassName => $handlerClassName) {
-            $this->addErrorHandler($exceptionClassName, $handlerClassName);
+        foreach ($handlers as $exceptionClassName => $handler) {
+            $this->addErrorHandler($exceptionClassName, $handler);
         }
     }
 
