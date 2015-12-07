@@ -22,7 +22,7 @@
     },
     "require": {
         "php": ">=5.6.0",
-        "gobline/container": "~1.0",
+        "gobline/container": "~2.0",
         "gobline/environment": "~1.0",
         "gobline/router": "~2.0",
         "gobline/auth": "~2.0",
