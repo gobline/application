@@ -102,6 +102,11 @@ class Facade
         return $this->container->get(RouteCollection::class);
     }
 
+    public function setDebugMode($debugMode)
+    {
+        $this->container->get(Environment::class)->setDebugMode($debugMode);
+    }
+
     private function registerEnvironment()
     {
         $environment = new Environment();
