@@ -22,12 +22,12 @@
     },
     "require": {
         "php": ">=5.6.0",
-        "gobline/container": "~2.0",
-        "gobline/environment": "~1.0",
-        "gobline/router": "~2.0",
-        "gobline/auth": "~2.0",
-        "gobline/acl": "~2.0",
-        "gobline/view": "~1.0",
+        "gobline/container": "^2.0",
+        "gobline/environment": "^1.0",
+        "gobline/router": "^2.0",
+        "gobline/auth": "^2.0",
+        "gobline/acl": "^2.0",
+        "gobline/view": "^2.0",
         "filp/whoops": "^1.1",
         "zendframework/zend-diactoros": "^1.2",
         "relay/relay": "^1.0"
