@@ -32,21 +32,22 @@ class HtmlRendererMiddleware
     {
         $template = $request->getAttribute('_view');
 
-        if (!isset($template['text/html'])) {
+        $template = isset($template['text/html']) ? $template['text/html'] : null;
+
+        $layouts = $request->getAttribute('_layouts', []);
+
+        if (!$template && !$layouts) {
             return $next($request, $response);
         }
 
-        $template = $template['text/html'];
-
-        $model = $request->getAttribute('_model');
-
-        $layouts = $request->getAttribute('_layouts', []);
+        $this->renderer->enableLayouts();
         $this->renderer->setLayouts($layouts);
 
-        $this->renderer->enableLayouts();
         if ($request->getAttribute('_isSubRequest')) {
             $this->renderer->disableLayouts();
         }
+
+        $model = $request->getAttribute('_model');
 
         return new HtmlResponse($this->renderer->render($template, $model));
     }
