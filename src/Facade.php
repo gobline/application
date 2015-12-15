@@ -74,6 +74,16 @@ class Facade
         }
     }
 
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
     public function getContainer()
     {
         return $this->container;
