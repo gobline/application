@@ -124,4 +124,14 @@ class MiddlewareDispatcher
             $this->addMiddleware($middleware);
         }
     }
+
+    public function hasMiddlewares()
+    {
+        return (bool) $this->middlewares;
+    }
+
+    public function hasErrorHandlers()
+    {
+        return (bool) $this->errorHandlers;
+    }
 }

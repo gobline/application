@@ -59,13 +59,21 @@ class Facade
         $this->registerAuth();
         $this->registerViewHelperRegistry();
         $this->registerDispatcher();
-
-        $this->addDefaultMiddlewares();
     }
 
     public function run()
     {
-        $response = $this->getDispatcher()->dispatch($this->request, $this->response);
+        $dispatcher = $this->getDispatcher();
+
+        if (!$dispatcher->hasMiddlewares()) {
+            $this->addDefaultMiddlewares();
+        }
+
+        if (!$dispatcher->hasErrorHandlers()) {
+            $this->addDefaultErrorHandlers();
+        }
+
+        $response = $dispatcher->dispatch($this->request, $this->response);
 
         if (headers_sent()) {
             echo $response->getBody();
@@ -163,7 +171,12 @@ class Facade
             ->addMiddleware(RequestMatcherMiddleware::class)
             ->addMiddleware(AuthorizerMiddleware::class)
             ->addMiddleware(DispatcherMiddleware::class)
-            ->addMiddleware(HtmlRendererMiddleware::class)
+            ->addMiddleware(HtmlRendererMiddleware::class);
+    }
+
+    private function addDefaultErrorHandlers()
+    {
+        $this->getDispatcher()
             ->addErrorHandler(NoMatchingRouteException::class, NotFoundHandler::class)
             ->addErrorHandler(NotAuthenticatedException::class, NotAuthenticatedHandler::class)
             ->addErrorHandler(NotAuthorizedException::class, NotAuthorizedHandler::class)
