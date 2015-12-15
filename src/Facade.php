@@ -44,8 +44,6 @@ class Facade
     private $container;
     private $request;
     private $response;
-    private $dispatcher;
-    private $routeCollection;
 
     public function __construct()
     {
@@ -60,15 +58,14 @@ class Facade
         $this->registerFlash();
         $this->registerAuth();
         $this->registerViewHelperRegistry();
-
-        $this->dispatcher = $this->container->get(MiddlewareDispatcher::class);
+        $this->registerDispatcher();
 
         $this->addDefaultMiddlewares();
     }
 
     public function run()
     {
-        $response = $this->dispatcher->dispatch($this->request, $this->response);
+        $response = $this->getDispatcher()->dispatch($this->request, $this->response);
 
         if (headers_sent()) {
             echo $response->getBody();
@@ -94,7 +91,7 @@ class Facade
 
     public function getDispatcher()
     {
-        return $this->dispatcher;
+        return $this->container->get(MiddlewareDispatcher::class);
     }
 
     public function getRouteCollection()
@@ -145,9 +142,14 @@ class Facade
         $this->container->share(new ViewHelperRegistry($this->container));
     }
 
+    private function registerDispatcher()
+    {
+        $this->container->share(MiddlewareDispatcher::class);
+    }
+
     private function addDefaultMiddlewares()
     {
-        $this->dispatcher
+        $this->getDispatcher()
             ->addMiddleware(RequestMatcherMiddleware::class)
             ->addMiddleware(AuthorizerMiddleware::class)
             ->addMiddleware(DispatcherMiddleware::class)
