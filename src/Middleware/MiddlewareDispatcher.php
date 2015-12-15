@@ -56,40 +56,45 @@ class MiddlewareDispatcher
         try {
             $response = $this->relay->__invoke($request, $response);
         } catch (\Exception $e) {
-            if ($this->environment->isDebugMode()) {
-                $handler = $this->container->get(WhoopsHandler::class);
-            } else {
-                foreach ($this->errorHandlers as $exceptionClassName => $handler) {
-                    if (is_a($e, $exceptionClassName)) {
-                        if (is_string($handler)) {
-                            $handler = $this->container->get($handler);
-                        }
-                        break;
-                    }
-                }
-            }
-            $response = $handler($request, $response, $e);
-
-            if ($suppressErrors) {
-                return new EmptyResponse();
-            }
-
-            while (ob_get_level()) {
-                if ($this->environment->isDebugMode()) {
-                    echo ob_get_clean();
-                } else {
-                    ob_end_clean();
-                }
-            }
-            if (headers_sent()) {
-                echo $response->getBody();
-            } else {
-                (new SapiEmitter())->emit($response);
-            }
-            exit;
+            $this->handleException($request, $response, $e, $suppressErrors);
         }
 
         return $response;
+    }
+
+    public function handleException(ServerRequestInterface $request, ResponseInterface $response, \Exception $e, $suppressErrors = false)
+    {
+        if ($this->environment->isDebugMode()) {
+            $handler = $this->container->get(WhoopsHandler::class);
+        } else {
+            foreach ($this->errorHandlers as $exceptionClassName => $handler) {
+                if (is_a($e, $exceptionClassName)) {
+                    if (is_string($handler)) {
+                        $handler = $this->container->get($handler);
+                    }
+                    break;
+                }
+            }
+        }
+        $response = $handler($request, $response, $e);
+
+        if ($suppressErrors) {
+            return new EmptyResponse();
+        }
+
+        while (ob_get_level()) {
+            if ($this->environment->isDebugMode()) {
+                echo ob_get_clean();
+            } else {
+                ob_end_clean();
+            }
+        }
+        if (headers_sent()) {
+            echo $response->getBody();
+        } else {
+            (new SapiEmitter())->emit($response);
+        }
+        exit;
     }
 
     public function addErrorHandler($exceptionClassName, $handler)
