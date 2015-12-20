@@ -34,10 +34,10 @@ class RequestMatcherMiddleware
     {
         $request = $request->withAttribute('_language', $this->environment->getLanguage());
 
-        $request = $this->environment->getBasePathResolver()->removeBasePath($request);
-        $request = $this->environment->getLanguageResolver()->removeLanguage($request);
+        $requestToMatch = $this->environment->getBasePathResolver()->removeBasePath($request);
+        $requestToMatch = $this->environment->getLanguageResolver()->removeLanguage($requestToMatch);
 
-        $routeData = $this->requestMatcher->match($request);
+        $routeData = $this->requestMatcher->match($requestToMatch);
 
         $this->environment->setMatchedRouteName($routeData->getName());
         $this->environment->setMatchedRouteParams($routeData->getParams());
