@@ -27,6 +27,7 @@ use Gobline\Application\Middleware\MiddlewareDispatcher;
 use Gobline\Application\Middleware\RequestMatcherMiddleware;
 use Gobline\Application\Middleware\AuthorizerMiddleware;
 use Gobline\Application\Middleware\DispatcherMiddleware;
+use Gobline\Application\Middleware\JsonRendererMiddleware;
 use Gobline\Application\Middleware\HtmlRendererMiddleware;
 use Gobline\Application\Middleware\ErrorHandler\NotFoundHandler;
 use Gobline\Application\Middleware\ErrorHandler\NotAuthenticatedHandler;
@@ -171,6 +172,7 @@ class Facade
             ->addMiddleware(RequestMatcherMiddleware::class)
             ->addMiddleware(AuthorizerMiddleware::class)
             ->addMiddleware(DispatcherMiddleware::class)
+            ->addMiddleware(JsonRendererMiddleware::class)
             ->addMiddleware(HtmlRendererMiddleware::class);
     }
 
