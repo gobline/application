@@ -26,6 +26,7 @@
         "gobline/registrar": "^1.0",
         "gobline/environment": "^1.0",
         "gobline/router": "^3.0",
+        "gobline/filter": "^2.0",
         "gobline/flash": "^2.0",
         "gobline/auth": "^2.0",
         "gobline/acl": "^2.0",
