@@ -37,6 +37,10 @@ class DispatcherMiddleware
 
         $actionModel = $request->getAttribute('_action');
 
+        if (!$actionModel) {
+            return $next($request, $response);
+        }
+
         if (is_string($actionModel)) {
             $actionModel = $this->container->get($actionModel);
         }
