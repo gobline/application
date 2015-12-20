@@ -32,7 +32,7 @@ class DispatcherMiddleware
         $handler = $request->getAttribute('_handler');
 
         if ($handler) {
-            $response = $handler($request, $response);
+            $response = $handler($request, $response, ...$this->getAttributes($request));
         }
 
         $actionModel = $request->getAttribute('_action');
@@ -42,16 +42,19 @@ class DispatcherMiddleware
         }
 
         if (is_callable($actionModel)) {
-            $parameters = array_filter($request->getAttributes(),
-                function ($parameter) {
-                    return $parameter[0] !== '_';
-                }, ARRAY_FILTER_USE_KEY);
-
-            $actionModel($request, ...array_values($parameters));
+            $actionModel($request, ...$this->getAttributes($request));
         }
 
         $request = $request->withAttribute('_model', $actionModel);
 
         return $next($request, $response);
+    }
+
+    private function getAttributes(ServerRequestInterface $request)
+    {
+        return array_values(array_filter($request->getAttributes(),
+            function ($parameter) {
+                return $parameter[0] !== '_';
+            }, ARRAY_FILTER_USE_KEY));
     }
 }
