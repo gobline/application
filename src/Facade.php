@@ -25,6 +25,7 @@ use Gobline\Auth\CurrentUserInterface;
 use Gobline\Auth\Persistence\CurrentUser as SessionDecorator;
 use Gobline\Application\Middleware\MiddlewareDispatcher;
 use Gobline\Application\Middleware\RequestMatcherMiddleware;
+use Gobline\Application\Middleware\FilterMiddleware;
 use Gobline\Application\Middleware\AuthorizerMiddleware;
 use Gobline\Application\Middleware\DispatcherMiddleware;
 use Gobline\Application\Middleware\JsonRendererMiddleware;
@@ -176,6 +177,7 @@ class Facade
         $this->getDispatcher()
             ->addMiddleware(RequestMatcherMiddleware::class)
             ->addMiddleware(AuthorizerMiddleware::class)
+            ->addMiddleware(FilterMiddleware::class)
             ->addMiddleware(DispatcherMiddleware::class)
             ->addMiddleware(JsonRendererMiddleware::class)
             ->addMiddleware(HtmlRendererMiddleware::class);
