@@ -43,7 +43,10 @@ class HtmlRendererMiddleware
         $this->renderer->enableLayouts();
         $this->renderer->setLayouts($layouts);
 
-        if ($request->getAttribute('_isSubRequest')) {
+        if (
+            $request->getAttribute('_isSubRequest')
+            || strtolower($request->getHeaderLine('X-Requested-With')) === 'xmlhttprequest'
+        ) {
             $this->renderer->disableLayouts();
         }
 
