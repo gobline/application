@@ -53,7 +53,7 @@ abstract class AbstractErrorHandler
         ];
     }
 
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Exception $e)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Throwable $e)
     {
         if ($this->logger) {
             $this->logger->log($this->logLevel, $e->getMessage(), ['exception' => $e]);

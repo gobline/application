@@ -62,7 +62,7 @@ class MiddlewareDispatcher
         return $response;
     }
 
-    public function handleException(ServerRequestInterface $request, ResponseInterface $response, \Exception $e, $suppressErrors = false)
+    public function handleException(ServerRequestInterface $request, ResponseInterface $response, \Throwable $e, $suppressErrors = false)
     {
         if ($this->environment->isDebugMode()) {
             $handler = $this->container->get(WhoopsHandler::class);

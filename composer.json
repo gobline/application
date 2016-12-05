@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0.0",
         "gobline/container": "^2.0",
         "gobline/registrar": "^1.0",
         "gobline/environment": "^1.0",
@@ -31,13 +31,13 @@
         "gobline/auth": "^2.0",
         "gobline/acl": "^2.0",
         "gobline/view": "^2.0",
-        "filp/whoops": "^1.1",
+        "filp/whoops": "^2.1",
         "zendframework/zend-diactoros": "^1.2",
         "relay/relay": "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.1.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     }
 }
