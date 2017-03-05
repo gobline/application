@@ -121,7 +121,7 @@ class Facade
 
     public function __call($name, array $arguments)
     {
-        return $this->container->get(RouteCollection::class)->$name($arguments);
+        return $this->container->get(RouteCollection::class)->$name(...$arguments);
     }
 
     public function setDebugMode($debugMode)
