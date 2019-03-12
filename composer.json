@@ -30,14 +30,14 @@
         "gobline/flash": "^2.0",
         "gobline/auth": "^2.0",
         "gobline/acl": "^2.0",
-        "gobline/view": "^3.0",
+        "gobline/view": "^4.0",
         "filp/whoops": "^2.1",
         "zendframework/zend-diactoros": "^1.2",
         "relay/relay": "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0.x-dev"
+            "dev-master": "4.0.x-dev"
         }
     }
 }
